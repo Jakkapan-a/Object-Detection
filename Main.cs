@@ -91,7 +91,7 @@ namespace Object_Detection
             }
         }
 
-        
+
         private bool isConnect = false;
         private Task openTask;
         private int camIndex;
@@ -144,7 +144,7 @@ namespace Object_Detection
 
         private void captureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
                 string filename = Guid.NewGuid().ToString() + ".jpg";
 
@@ -154,11 +154,12 @@ namespace Object_Detection
                 toolStripStatusLabel.Text = filename;
                 filename = Path.Combine(Properties.Resources.path_image, filename);
                 pictureBox1.Image?.Save(filename, ImageFormat.Jpeg);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }
-            
+
         }
     }
 }

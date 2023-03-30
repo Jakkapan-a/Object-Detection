@@ -31,22 +31,33 @@
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             imageToolStripMenuItem = new ToolStripMenuItem();
+            captureToolStripMenuItem = new ToolStripMenuItem();
             cameraToolStripMenuItem = new ToolStripMenuItem();
             settingToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel = new ToolStripStatusLabel();
             splitContainer1 = new SplitContainer();
-            btnConnect = new Button();
-            cbDrive = new ComboBox();
+            splitContainer2 = new SplitContainer();
             pictureBox1 = new PictureBox();
             label1 = new Label();
-            captureToolStripMenuItem = new ToolStripMenuItem();
+            panel1 = new Panel();
+            checkBox1 = new CheckBox();
+            btnConnect = new Button();
+            comboBox2 = new ComboBox();
+            comboBox1 = new ComboBox();
+            cbDrive = new ComboBox();
+            label2 = new Label();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -70,6 +81,14 @@
             imageToolStripMenuItem.Name = "imageToolStripMenuItem";
             imageToolStripMenuItem.Size = new Size(52, 20);
             imageToolStripMenuItem.Text = "Image";
+            // 
+            // captureToolStripMenuItem
+            // 
+            captureToolStripMenuItem.Name = "captureToolStripMenuItem";
+            captureToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Z;
+            captureToolStripMenuItem.Size = new Size(180, 22);
+            captureToolStripMenuItem.Text = "Capture";
+            captureToolStripMenuItem.Click += captureToolStripMenuItem_Click;
             // 
             // cameraToolStripMenuItem
             // 
@@ -109,64 +128,131 @@
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(btnConnect);
-            splitContainer1.Panel1.Controls.Add(cbDrive);
-            splitContainer1.Panel1.Controls.Add(pictureBox1);
+            splitContainer1.Panel1.Controls.Add(splitContainer2);
             splitContainer1.Panel1.Controls.Add(label1);
+            splitContainer1.Panel1.Padding = new Padding(5);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(panel1);
+            splitContainer1.Panel2.Controls.Add(label2);
+            splitContainer1.Panel2.Padding = new Padding(5);
             splitContainer1.Size = new Size(800, 404);
             splitContainer1.SplitterDistance = 370;
             splitContainer1.TabIndex = 2;
             // 
-            // btnConnect
+            // splitContainer2
             // 
-            btnConnect.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnConnect.Location = new Point(277, 371);
-            btnConnect.Name = "btnConnect";
-            btnConnect.Size = new Size(88, 23);
-            btnConnect.TabIndex = 3;
-            btnConnect.Text = "Connect";
-            btnConnect.UseVisualStyleBackColor = true;
-            btnConnect.Click += btnConnect_Click;
+            splitContainer2.BorderStyle = BorderStyle.FixedSingle;
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.Location = new Point(5, 47);
+            splitContainer2.Name = "splitContainer2";
+            splitContainer2.Orientation = Orientation.Horizontal;
             // 
-            // cbDrive
+            // splitContainer2.Panel1
             // 
-            cbDrive.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            cbDrive.FormattingEnabled = true;
-            cbDrive.Location = new Point(115, 372);
-            cbDrive.Name = "cbDrive";
-            cbDrive.Size = new Size(156, 23);
-            cbDrive.TabIndex = 2;
+            splitContainer2.Panel1.Controls.Add(pictureBox1);
+            splitContainer2.Size = new Size(360, 352);
+            splitContainer2.SplitterDistance = 239;
+            splitContainer2.TabIndex = 1;
             // 
             // pictureBox1
             // 
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pictureBox1.BackColor = SystemColors.ControlLight;
-            pictureBox1.Location = new Point(12, 58);
+            pictureBox1.Location = new Point(6, 3);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(353, 302);
+            pictureBox1.Size = new Size(349, 231);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 1;
             pictureBox1.TabStop = false;
             // 
             // label1
             // 
-            label1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             label1.BackColor = Color.FromArgb(255, 192, 128);
+            label1.Dock = DockStyle.Top;
             label1.Font = new Font("Comic Sans MS", 18F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(12, 10);
+            label1.Location = new Point(5, 5);
             label1.Name = "label1";
-            label1.Size = new Size(353, 42);
+            label1.Size = new Size(360, 42);
             label1.TabIndex = 0;
             label1.Text = "CAMERA";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // captureToolStripMenuItem
+            // panel1
             // 
-            captureToolStripMenuItem.Name = "captureToolStripMenuItem";
-            captureToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Z;
-            captureToolStripMenuItem.Size = new Size(180, 22);
-            captureToolStripMenuItem.Text = "Capture";
-            captureToolStripMenuItem.Click += captureToolStripMenuItem_Click;
+            panel1.BackColor = SystemColors.ControlLight;
+            panel1.Controls.Add(checkBox1);
+            panel1.Controls.Add(btnConnect);
+            panel1.Controls.Add(comboBox2);
+            panel1.Controls.Add(comboBox1);
+            panel1.Controls.Add(cbDrive);
+            panel1.Dock = DockStyle.Right;
+            panel1.Location = new Point(246, 47);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(173, 350);
+            panel1.TabIndex = 2;
+            // 
+            // checkBox1
+            // 
+            checkBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(67, 141);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(100, 19);
+            checkBox1.TabIndex = 4;
+            checkBox1.Text = "Use serial port";
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // btnConnect
+            // 
+            btnConnect.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            btnConnect.Location = new Point(11, 166);
+            btnConnect.Name = "btnConnect";
+            btnConnect.Size = new Size(156, 23);
+            btnConnect.TabIndex = 3;
+            btnConnect.Text = "Connect";
+            btnConnect.UseVisualStyleBackColor = true;
+            btnConnect.Click += btnConnect_Click;
+            // 
+            // comboBox2
+            // 
+            comboBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            comboBox2.FormattingEnabled = true;
+            comboBox2.Location = new Point(11, 112);
+            comboBox2.Name = "comboBox2";
+            comboBox2.Size = new Size(156, 23);
+            comboBox2.TabIndex = 2;
+            // 
+            // comboBox1
+            // 
+            comboBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(11, 83);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(156, 23);
+            comboBox1.TabIndex = 2;
+            // 
+            // cbDrive
+            // 
+            cbDrive.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cbDrive.FormattingEnabled = true;
+            cbDrive.Location = new Point(11, 52);
+            cbDrive.Name = "cbDrive";
+            cbDrive.Size = new Size(156, 23);
+            cbDrive.TabIndex = 2;
+            // 
+            // label2
+            // 
+            label2.BackColor = Color.FromArgb(255, 192, 128);
+            label2.Dock = DockStyle.Top;
+            label2.Font = new Font("Comic Sans MS", 18F, FontStyle.Regular, GraphicsUnit.Point);
+            label2.Location = new Point(5, 5);
+            label2.Name = "label2";
+            label2.Size = new Size(414, 42);
+            label2.TabIndex = 1;
+            label2.Text = "RESULT";
+            label2.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // Main
             // 
@@ -185,9 +271,15 @@
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            splitContainer2.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -207,5 +299,11 @@
         private ToolStripMenuItem cameraToolStripMenuItem;
         private ToolStripMenuItem settingToolStripMenuItem;
         private ToolStripMenuItem captureToolStripMenuItem;
+        private Label label2;
+        private Panel panel1;
+        private ComboBox comboBox2;
+        private ComboBox comboBox1;
+        private CheckBox checkBox1;
+        private SplitContainer splitContainer2;
     }
 }
