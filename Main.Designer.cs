@@ -37,24 +37,27 @@
             settingToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel = new ToolStripStatusLabel();
+            toolStripStatusSerial = new ToolStripStatusLabel();
+            toolStripStatusError = new ToolStripStatusLabel();
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
             pictureBox1 = new PictureBox();
             richTextBox1 = new RichTextBox();
             label1 = new Label();
             panel2 = new Panel();
+            lbName = new Label();
             flowLayoutPanel1 = new FlowLayoutPanel();
             panel1 = new Panel();
             pictureBox2 = new PictureBox();
-            checkBox1 = new CheckBox();
+            cbSerial = new CheckBox();
             btnConnect = new Button();
-            comboBox2 = new ComboBox();
-            comboBox1 = new ComboBox();
+            cbCOM = new ComboBox();
+            cbBaud = new ComboBox();
             cbDrive = new ComboBox();
             label2 = new Label();
             contextMenuStripDeleteModule = new ContextMenuStrip(components);
             deleteToolStripMenuItem = new ToolStripMenuItem();
-            lbName = new Label();
+            toolStripStatusSerialData = new ToolStripStatusLabel();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -118,18 +121,32 @@
             // 
             // statusStrip1
             // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel });
-            statusStrip1.Location = new Point(0, 428);
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel, toolStripStatusSerial, toolStripStatusError, toolStripStatusSerialData });
+            statusStrip1.Location = new Point(0, 426);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(800, 22);
+            statusStrip1.Size = new Size(800, 24);
             statusStrip1.TabIndex = 1;
             statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel
             // 
             toolStripStatusLabel.Name = "toolStripStatusLabel";
-            toolStripStatusLabel.Size = new Size(12, 17);
+            toolStripStatusLabel.Size = new Size(12, 19);
             toolStripStatusLabel.Text = "-";
+            // 
+            // toolStripStatusSerial
+            // 
+            toolStripStatusSerial.BorderSides = ToolStripStatusLabelBorderSides.Left;
+            toolStripStatusSerial.Name = "toolStripStatusSerial";
+            toolStripStatusSerial.Size = new Size(16, 19);
+            toolStripStatusSerial.Text = "-";
+            // 
+            // toolStripStatusError
+            // 
+            toolStripStatusError.BorderSides = ToolStripStatusLabelBorderSides.Left;
+            toolStripStatusError.Name = "toolStripStatusError";
+            toolStripStatusError.Size = new Size(16, 19);
+            toolStripStatusError.Text = "-";
             // 
             // splitContainer1
             // 
@@ -150,7 +167,7 @@
             splitContainer1.Panel2.Controls.Add(panel1);
             splitContainer1.Panel2.Controls.Add(label2);
             splitContainer1.Panel2.Padding = new Padding(5);
-            splitContainer1.Size = new Size(800, 404);
+            splitContainer1.Size = new Size(800, 402);
             splitContainer1.SplitterDistance = 370;
             splitContainer1.TabIndex = 2;
             // 
@@ -169,8 +186,8 @@
             // splitContainer2.Panel2
             // 
             splitContainer2.Panel2.Controls.Add(richTextBox1);
-            splitContainer2.Size = new Size(360, 352);
-            splitContainer2.SplitterDistance = 239;
+            splitContainer2.Size = new Size(360, 350);
+            splitContainer2.SplitterDistance = 237;
             splitContainer2.TabIndex = 1;
             // 
             // pictureBox1
@@ -179,7 +196,7 @@
             pictureBox1.BackColor = SystemColors.ControlLight;
             pictureBox1.Location = new Point(6, 3);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(349, 231);
+            pictureBox1.Size = new Size(349, 229);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 1;
             pictureBox1.TabStop = false;
@@ -212,15 +229,27 @@
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(5, 47);
             panel2.Name = "panel2";
-            panel2.Size = new Size(241, 350);
+            panel2.Size = new Size(241, 348);
             panel2.TabIndex = 3;
+            // 
+            // lbName
+            // 
+            lbName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lbName.BackColor = Color.Yellow;
+            lbName.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
+            lbName.Location = new Point(3, 3);
+            lbName.Name = "lbName";
+            lbName.Size = new Size(232, 43);
+            lbName.TabIndex = 5;
+            lbName.Text = "---";
+            lbName.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // flowLayoutPanel1
             // 
             flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            flowLayoutPanel1.Location = new Point(3, 69);
+            flowLayoutPanel1.Location = new Point(3, 52);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(232, 278);
+            flowLayoutPanel1.Size = new Size(232, 293);
             flowLayoutPanel1.TabIndex = 4;
             flowLayoutPanel1.Resize += flowLayoutPanel1_Resize;
             // 
@@ -228,15 +257,15 @@
             // 
             panel1.BackColor = SystemColors.ControlLight;
             panel1.Controls.Add(pictureBox2);
-            panel1.Controls.Add(checkBox1);
+            panel1.Controls.Add(cbSerial);
             panel1.Controls.Add(btnConnect);
-            panel1.Controls.Add(comboBox2);
-            panel1.Controls.Add(comboBox1);
+            panel1.Controls.Add(cbCOM);
+            panel1.Controls.Add(cbBaud);
             panel1.Controls.Add(cbDrive);
             panel1.Dock = DockStyle.Right;
             panel1.Location = new Point(246, 47);
             panel1.Name = "panel1";
-            panel1.Size = new Size(173, 350);
+            panel1.Size = new Size(173, 348);
             panel1.TabIndex = 2;
             // 
             // pictureBox2
@@ -249,16 +278,16 @@
             pictureBox2.TabIndex = 5;
             pictureBox2.TabStop = false;
             // 
-            // checkBox1
+            // cbSerial
             // 
-            checkBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(67, 141);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(100, 19);
-            checkBox1.TabIndex = 4;
-            checkBox1.Text = "Use serial port";
-            checkBox1.UseVisualStyleBackColor = true;
+            cbSerial.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cbSerial.AutoSize = true;
+            cbSerial.Location = new Point(67, 141);
+            cbSerial.Name = "cbSerial";
+            cbSerial.Size = new Size(100, 19);
+            cbSerial.TabIndex = 4;
+            cbSerial.Text = "Use serial port";
+            cbSerial.UseVisualStyleBackColor = true;
             // 
             // btnConnect
             // 
@@ -271,23 +300,23 @@
             btnConnect.UseVisualStyleBackColor = true;
             btnConnect.Click += btnConnect_Click;
             // 
-            // comboBox2
+            // cbCOM
             // 
-            comboBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(11, 112);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(156, 23);
-            comboBox2.TabIndex = 2;
+            cbCOM.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cbCOM.FormattingEnabled = true;
+            cbCOM.Location = new Point(11, 112);
+            cbCOM.Name = "cbCOM";
+            cbCOM.Size = new Size(156, 23);
+            cbCOM.TabIndex = 2;
             // 
-            // comboBox1
+            // cbBaud
             // 
-            comboBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(11, 83);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(156, 23);
-            comboBox1.TabIndex = 2;
+            cbBaud.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cbBaud.FormattingEnabled = true;
+            cbBaud.Location = new Point(11, 83);
+            cbBaud.Name = "cbBaud";
+            cbBaud.Size = new Size(156, 23);
+            cbBaud.TabIndex = 2;
             // 
             // cbDrive
             // 
@@ -323,17 +352,12 @@
             deleteToolStripMenuItem.Size = new Size(107, 22);
             deleteToolStripMenuItem.Text = "Delete";
             // 
-            // lbName
+            // toolStripStatusSerialData
             // 
-            lbName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lbName.BackColor = Color.Yellow;
-            lbName.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
-            lbName.Location = new Point(3, 13);
-            lbName.Name = "lbName";
-            lbName.Size = new Size(232, 43);
-            lbName.TabIndex = 5;
-            lbName.Text = "---";
-            lbName.TextAlign = ContentAlignment.MiddleCenter;
+            toolStripStatusSerialData.BorderSides = ToolStripStatusLabelBorderSides.Left;
+            toolStripStatusSerialData.Name = "toolStripStatusSerialData";
+            toolStripStatusSerialData.Size = new Size(16, 19);
+            toolStripStatusSerialData.Text = "-";
             // 
             // Main
             // 
@@ -346,7 +370,7 @@
             MainMenuStrip = menuStrip1;
             Name = "Main";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Form1";
+            Text = "Object Detection";
             Load += Main_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
@@ -387,9 +411,9 @@
         private ToolStripMenuItem captureToolStripMenuItem;
         private Label label2;
         private Panel panel1;
-        private ComboBox comboBox2;
-        private ComboBox comboBox1;
-        private CheckBox checkBox1;
+        private ComboBox cbCOM;
+        private ComboBox cbBaud;
+        private CheckBox cbSerial;
         private SplitContainer splitContainer2;
         private RichTextBox richTextBox1;
         private PictureBox pictureBox2;
@@ -398,5 +422,8 @@
         private ContextMenuStrip contextMenuStripDeleteModule;
         private ToolStripMenuItem deleteToolStripMenuItem;
         private Label lbName;
+        private ToolStripStatusLabel toolStripStatusSerial;
+        private ToolStripStatusLabel toolStripStatusError;
+        private ToolStripStatusLabel toolStripStatusSerialData;
     }
 }

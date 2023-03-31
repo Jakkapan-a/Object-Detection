@@ -57,23 +57,23 @@ void loop() {
 }
 
 void btStartPressed() {
-  Serial.println("Start pressed");
+  // Serial.println("Start pressed");
   serialCommand("st");
 }
 void btStartRepassed() {
-  Serial.println("Start repressed");
+  // Serial.println("Start repressed");
 }
 
 void btResetPressed() {
-  Serial.println("Reset pressed");
+  // Serial.println("Reset pressed");
   serialCommand("rs");
 }
 
 void btResetRepassed() {
-  Serial.println("Reset repressed");
+  // Serial.println("Reset repressed");
 
-  ledIsOk.off();
-  ledIsNg.off();
+  ledOk.off();
+  ledNg.off();
 }
 
 void serialEvent() {
@@ -96,9 +96,9 @@ void serialCommand(String command) {
 }
 
 void ledIsOk(bool state) {
-  Serial.println("LED OK: "+String(state));
+  // Serial.println("LED OK: "+String(state));
 }
 
 void ledIsNg(bool state) {
-  Serial.println("LED NG: "+String(state));
+  // Serial.println("LED NG: "+String(state));
 }
