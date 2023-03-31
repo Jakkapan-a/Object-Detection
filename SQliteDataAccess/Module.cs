@@ -11,8 +11,9 @@ namespace Object_Detection.SQliteDataAccess
         public int id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
+        public string filename { get; set; }
         public string path { get; set; }
-        public int status { get; set; } = 0;
+        public int status { get; set; } = 1;
         public string created_at { get; set; }
         public string updated_at { get; set; }
 
@@ -21,10 +22,11 @@ namespace Object_Detection.SQliteDataAccess
         {
             // SQL Create Table Module
             // CREATE TABLE IF NOT EXISTS `module` (
-                string sql = @"CREATE TABLE 'module' 
+                string sql = @"CREATE TABLE IF NOT EXISTS 'module' 
                         ('id'INTEGER NOT NULL,
                             'name'	TEXT,
                             'description'	TEXT,
+                            'filename'	TEXT,
                             'path'	TEXT,
                             'status'	INTEGER,
                             'created_at'	TEXT,
@@ -36,10 +38,11 @@ namespace Object_Detection.SQliteDataAccess
         }
 
         public void Save(){
-            string sql = @"INSERT INTO module (name, description, path, status, created_at, updated_at) VALUES (@name, @description, @path, @status, @created_at, @updated_at)";
+            string sql = @"INSERT INTO module (name, description, filename, path, status, created_at, updated_at) VALUES (@name, @description, @filename, @path, @status, @created_at, @updated_at)";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@name", name);
             parameters.Add("@description", description);
+            parameters.Add("@filename", filename);
             parameters.Add("@path", path);
             parameters.Add("@status", status);
             parameters.Add("@created_at", SQliteDataAccess.GetDateTimeNow());
@@ -48,11 +51,12 @@ namespace Object_Detection.SQliteDataAccess
         }
 
         public void Update(){
-            string sql = @"UPDATE module SET name = @name, description = @description, path = @path, status = @status, created_at = @created_at, updated_at = @updated_at WHERE id = @id";
+            string sql = @"UPDATE module SET name = @name, description = @description, filename = @filename, path = @path, status = @status, created_at = @created_at, updated_at = @updated_at WHERE id = @id";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", id);
             parameters.Add("@name", name);
             parameters.Add("@description", description);
+            parameters.Add("@filename", filename);
             parameters.Add("@path", path);
             parameters.Add("@status", status);
             parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
@@ -68,18 +72,25 @@ namespace Object_Detection.SQliteDataAccess
 
 
         public static List<Module> Get(){
-            string sql = @"SELECT * FROM module";
+            string sql = "module";
             return SQliteDataAccess.GetAll<Module>(sql);
         }
 
+        /// <summary>
+        ///  Get Module by id
+        /// </summary>
         public static List<Module> Get(int id)
         {
+            
             string sql = @"SELECT * FROM module WHERE id = @id";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", id);
             return SQliteDataAccess.Query<Module>(sql, parameters);
         }
 
+        /// <summary>
+        ///  Get Module by name
+        /// </summary>
         public static List<Module> Get(string name)
         {
             string sql = @"SELECT * FROM module WHERE name = @name";

@@ -1,5 +1,6 @@
 using DirectShowLib;
 using Object_Detection.Forms;
+using Object_Detection;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using TClass;
+using System.IO.Ports;
 
 namespace Object_Detection
 {
@@ -15,6 +17,8 @@ namespace Object_Detection
         private readonly BackgroundWorker backgroundObjDetection;
         public readonly TControl cameraControl;
         public readonly TCapture.Capture myCapture;
+        public readonly SQliteDataAccess.Module module;
+        private readonly SerialPort serialPort;
         public Main()
         {
             InitializeComponent();
@@ -23,7 +27,14 @@ namespace Object_Detection
             myCapture.OnVideoStarted += MyCapture_OnVideoStarted;
             myCapture.OnError += MyCapture_OnError;
             cameraControl = new TControl();
+            module = new SQliteDataAccess.Module();
+
+            serialPort = new SerialPort();
+            serialPort.DataReceived += SerialPort_DataReceived;
+            serialPort.ErrorReceived += SerialPort_ErrorReceived;
         }
+
+      
 
         private void Main_Load(object sender, EventArgs e)
         {
@@ -157,6 +168,21 @@ namespace Object_Detection
             {
                 Debug.WriteLine(ex.Message);
             }
+
+        }
+        private void SerialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        private void flowLayoutPanel1_Resize(object sender, EventArgs e)
+        {
 
         }
     }

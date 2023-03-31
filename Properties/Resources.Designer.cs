@@ -61,6 +61,46 @@ namespace Object_Detection.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap camera_logo {
+            get {
+                object obj = ResourceManager.GetObject("camera logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon icons8_Plus {
+            get {
+                object obj = ResourceManager.GetObject("icons8_Plus", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon icons8_Trash {
+            get {
+                object obj = ResourceManager.GetObject("icons8_Trash", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ONNX_logo_main {
+            get {
+                object obj = ResourceManager.GetObject("ONNX_logo_main", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ./system/images.
         /// </summary>
         internal static string path_image {
@@ -84,6 +124,16 @@ namespace Object_Detection.Properties {
         internal static System.Drawing.Bitmap Spinner_0_4s_800px {
             get {
                 object obj = ResourceManager.GetObject("Spinner-0.4s-800px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Trash_32 {
+            get {
+                object obj = ResourceManager.GetObject("Trash_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

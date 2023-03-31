@@ -50,9 +50,15 @@
 
   <ItemGroup>
     <Folder Include="Arduino\" />
+    <Folder Include="Database\" />
+    <Folder Include="Modules\" />
+    <Folder Include="Weight\" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Database\data.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

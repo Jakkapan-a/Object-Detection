@@ -17,9 +17,11 @@ namespace Object_Detection.SQliteDataAccess
     {
         public static List<T> GetAll<T>(string tableName, int limit = 100)
         {
-            var sql = $"SELECT * FROM {tableName} ORDER BY id DESC LIMIT @Limit";
-            var parameters = new { Limit = limit };
-            return ExecuteQuery<T>(sql, parameters);
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = cnn.Query<T>("select * from " + tableName + " order by id desc limit "+ limit, new DynamicParameters());
+                return output.ToList();
+            }
         }
 
         public static List<T> GetRow<T>(string sql)
@@ -29,21 +31,18 @@ namespace Object_Detection.SQliteDataAccess
 
         public static void Execute(string sql, Dictionary<string, object>? parameters = null)
         {
-            try
+            using (IDbConnection con = new SQLiteConnection(LoadConnectionString()))
             {
-                using (IDbConnection con = new SQLiteConnection(LoadConnectionString()))
-                {
-                    con.Execute(sql, parameters);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
+                con.Execute(sql, parameters);
             }
         }
 
         private static string LoadConnectionString(string id = "Default")
         {
+            if(id == "Default")
+            {
+                return "Data Source=" + System.IO.Directory.GetCurrentDirectory() + "\\" + "Database/data.db;Version=3;";
+            }
             return "Data Source=" + System.IO.Directory.GetCurrentDirectory() + "\\" + ConfigurationManager.ConnectionStrings[id];
         }
 
@@ -55,32 +54,18 @@ namespace Object_Detection.SQliteDataAccess
 
         public static bool IsExist(string sql)
         {
-            try
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-                {
-                    var output = cnn.Query(sql, new DynamicParameters());
-                    return output.ToList().Count > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                return false;
+                var output = cnn.Query(sql, new DynamicParameters());
+                return output.ToList().Count > 0;
             }
         }
 
-        private static List<T> ExecuteQuery<T>(string sql, object parameters = null)
+        private static List<T> ExecuteQuery<T>(string sql, Dictionary<string, object>? parameters = null)
         {
-            try
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-                {
-                    return cnn.Query<T>(sql, parameters).ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                return new List<T>();
+                return cnn.Query<T>(sql, parameters == null ? new DynamicParameters(): parameters ).ToList();
             }
         }
     }

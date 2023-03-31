@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             imageToolStripMenuItem = new ToolStripMenuItem();
@@ -39,16 +40,21 @@
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
             pictureBox1 = new PictureBox();
+            richTextBox1 = new RichTextBox();
             label1 = new Label();
+            panel2 = new Panel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             panel1 = new Panel();
+            pictureBox2 = new PictureBox();
             checkBox1 = new CheckBox();
             btnConnect = new Button();
             comboBox2 = new ComboBox();
             comboBox1 = new ComboBox();
             cbDrive = new ComboBox();
             label2 = new Label();
-            richTextBox1 = new RichTextBox();
+            contextMenuStripDeleteModule = new ContextMenuStrip(components);
+            deleteToolStripMenuItem = new ToolStripMenuItem();
+            lbName = new Label();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -60,7 +66,10 @@
             splitContainer2.Panel2.SuspendLayout();
             splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            panel2.SuspendLayout();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            contextMenuStripDeleteModule.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -137,7 +146,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(flowLayoutPanel1);
+            splitContainer1.Panel2.Controls.Add(panel2);
             splitContainer1.Panel2.Controls.Add(panel1);
             splitContainer1.Panel2.Controls.Add(label2);
             splitContainer1.Panel2.Padding = new Padding(5);
@@ -175,6 +184,15 @@
             pictureBox1.TabIndex = 1;
             pictureBox1.TabStop = false;
             // 
+            // richTextBox1
+            // 
+            richTextBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            richTextBox1.Location = new Point(3, 8);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(352, 96);
+            richTextBox1.TabIndex = 0;
+            richTextBox1.Text = "";
+            // 
             // label1
             // 
             label1.BackColor = Color.FromArgb(255, 192, 128);
@@ -187,17 +205,29 @@
             label1.Text = "CAMERA";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // panel2
+            // 
+            panel2.Controls.Add(lbName);
+            panel2.Controls.Add(flowLayoutPanel1);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(5, 47);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(241, 350);
+            panel2.TabIndex = 3;
+            // 
             // flowLayoutPanel1
             // 
-            flowLayoutPanel1.Dock = DockStyle.Fill;
-            flowLayoutPanel1.Location = new Point(5, 47);
+            flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            flowLayoutPanel1.Location = new Point(3, 69);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(241, 350);
-            flowLayoutPanel1.TabIndex = 3;
+            flowLayoutPanel1.Size = new Size(232, 278);
+            flowLayoutPanel1.TabIndex = 4;
+            flowLayoutPanel1.Resize += flowLayoutPanel1_Resize;
             // 
             // panel1
             // 
             panel1.BackColor = SystemColors.ControlLight;
+            panel1.Controls.Add(pictureBox2);
             panel1.Controls.Add(checkBox1);
             panel1.Controls.Add(btnConnect);
             panel1.Controls.Add(comboBox2);
@@ -208,6 +238,16 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(173, 350);
             panel1.TabIndex = 2;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.BackgroundImage = Properties.Resources.camera_logo;
+            pictureBox2.BackgroundImageLayout = ImageLayout.Zoom;
+            pictureBox2.Location = new Point(51, 3);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(90, 43);
+            pictureBox2.TabIndex = 5;
+            pictureBox2.TabStop = false;
             // 
             // checkBox1
             // 
@@ -270,14 +310,30 @@
             label2.Text = "RESULT";
             label2.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // richTextBox1
+            // contextMenuStripDeleteModule
             // 
-            richTextBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            richTextBox1.Location = new Point(3, 8);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(352, 96);
-            richTextBox1.TabIndex = 0;
-            richTextBox1.Text = "";
+            contextMenuStripDeleteModule.Items.AddRange(new ToolStripItem[] { deleteToolStripMenuItem });
+            contextMenuStripDeleteModule.Name = "contextMenuStripDeleteModule";
+            contextMenuStripDeleteModule.Size = new Size(108, 26);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            deleteToolStripMenuItem.Image = Properties.Resources.Trash_32;
+            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            deleteToolStripMenuItem.Size = new Size(107, 22);
+            deleteToolStripMenuItem.Text = "Delete";
+            // 
+            // lbName
+            // 
+            lbName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lbName.BackColor = Color.Yellow;
+            lbName.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
+            lbName.Location = new Point(3, 13);
+            lbName.Name = "lbName";
+            lbName.Size = new Size(232, 43);
+            lbName.TabIndex = 5;
+            lbName.Text = "---";
+            lbName.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // Main
             // 
@@ -305,8 +361,11 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            panel2.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            contextMenuStripDeleteModule.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -332,7 +391,12 @@
         private ComboBox comboBox1;
         private CheckBox checkBox1;
         private SplitContainer splitContainer2;
-        private FlowLayoutPanel flowLayoutPanel1;
         private RichTextBox richTextBox1;
+        private PictureBox pictureBox2;
+        private Panel panel2;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private ContextMenuStrip contextMenuStripDeleteModule;
+        private ToolStripMenuItem deleteToolStripMenuItem;
+        private Label lbName;
     }
 }

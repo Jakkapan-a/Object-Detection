@@ -1,3 +1,5 @@
+using Object_Detection.Forms;
+
 namespace Object_Detection
 {
     internal static class Program
