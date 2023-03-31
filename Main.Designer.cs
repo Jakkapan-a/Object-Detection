@@ -39,6 +39,7 @@
             toolStripStatusLabel = new ToolStripStatusLabel();
             toolStripStatusSerial = new ToolStripStatusLabel();
             toolStripStatusError = new ToolStripStatusLabel();
+            toolStripStatusSerialData = new ToolStripStatusLabel();
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
             pictureBox1 = new PictureBox();
@@ -57,7 +58,7 @@
             label2 = new Label();
             contextMenuStripDeleteModule = new ContextMenuStrip(components);
             deleteToolStripMenuItem = new ToolStripMenuItem();
-            toolStripStatusSerialData = new ToolStripStatusLabel();
+            uploadModuleToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -86,6 +87,7 @@
             // 
             // fileToolStripMenuItem
             // 
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { uploadModuleToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
@@ -115,7 +117,7 @@
             // settingToolStripMenuItem
             // 
             settingToolStripMenuItem.Name = "settingToolStripMenuItem";
-            settingToolStripMenuItem.Size = new Size(119, 22);
+            settingToolStripMenuItem.Size = new Size(180, 22);
             settingToolStripMenuItem.Text = "Controls";
             settingToolStripMenuItem.Click += settingToolStripMenuItem_Click;
             // 
@@ -147,6 +149,13 @@
             toolStripStatusError.Name = "toolStripStatusError";
             toolStripStatusError.Size = new Size(16, 19);
             toolStripStatusError.Text = "-";
+            // 
+            // toolStripStatusSerialData
+            // 
+            toolStripStatusSerialData.BorderSides = ToolStripStatusLabelBorderSides.Left;
+            toolStripStatusSerialData.Name = "toolStripStatusSerialData";
+            toolStripStatusSerialData.Size = new Size(16, 19);
+            toolStripStatusSerialData.Text = "-";
             // 
             // splitContainer1
             // 
@@ -282,6 +291,8 @@
             // 
             cbSerial.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             cbSerial.AutoSize = true;
+            cbSerial.Checked = true;
+            cbSerial.CheckState = CheckState.Checked;
             cbSerial.Location = new Point(67, 141);
             cbSerial.Name = "cbSerial";
             cbSerial.Size = new Size(100, 19);
@@ -352,12 +363,12 @@
             deleteToolStripMenuItem.Size = new Size(107, 22);
             deleteToolStripMenuItem.Text = "Delete";
             // 
-            // toolStripStatusSerialData
+            // uploadModuleToolStripMenuItem
             // 
-            toolStripStatusSerialData.BorderSides = ToolStripStatusLabelBorderSides.Left;
-            toolStripStatusSerialData.Name = "toolStripStatusSerialData";
-            toolStripStatusSerialData.Size = new Size(16, 19);
-            toolStripStatusSerialData.Text = "-";
+            uploadModuleToolStripMenuItem.Name = "uploadModuleToolStripMenuItem";
+            uploadModuleToolStripMenuItem.Size = new Size(180, 22);
+            uploadModuleToolStripMenuItem.Text = "Upload module";
+            uploadModuleToolStripMenuItem.Click += uploadModuleToolStripMenuItem_Click;
             // 
             // Main
             // 
@@ -425,5 +436,6 @@
         private ToolStripStatusLabel toolStripStatusSerial;
         private ToolStripStatusLabel toolStripStatusError;
         private ToolStripStatusLabel toolStripStatusSerialData;
+        private ToolStripMenuItem uploadModuleToolStripMenuItem;
     }
 }

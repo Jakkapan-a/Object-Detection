@@ -16,6 +16,7 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="DirectShowLib.Standard" Version="2.1.0" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.14.1" />
     <PackageReference Include="OpenCvSharp4" Version="4.7.0.20230115" />
     <PackageReference Include="OpenCvSharp4.Extensions" Version="4.7.0.20230115" />
     <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.7.0.20230115" />
@@ -26,6 +27,9 @@
   <ItemGroup>
     <Reference Include="TClass">
       <HintPath>..\..\..\..\CPush\Class Library\TClass\TClass\bin\Debug\TClass.dll</HintPath>
+    </Reference>
+    <Reference Include="Yolo.Net">
+      <HintPath>..\..\D92A\Code\Yolo.Net\bin\Debug\net7.0\Yolo.Net.dll</HintPath>
     </Reference>
   </ItemGroup>
 
