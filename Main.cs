@@ -28,6 +28,8 @@ namespace Object_Detection
 
         private bool isObjDetect = false;
         private Stopwatch stopwatch;
+
+        private string labelOBJ = string.Empty;
         private List<SQliteDataAccess.Module> modules;
         public Main()
         {
@@ -128,6 +130,18 @@ namespace Object_Detection
                 imgPrediction?.Dispose();
                 imgPrediction = (Image)bitmap.Clone();
                 bgObjDetection.RunWorkerAsync();
+            }
+
+            if (isObjDetect)
+            {
+                if(labelOBJ == "NG")
+                {
+                    serialCommand("ng");
+                }else if(labelOBJ == "OK")
+                {
+                    serialCommand("ok");
+                }
+                isObjDetect = false;
             }
         }
 
@@ -365,9 +379,15 @@ namespace Object_Detection
                     System.Drawing.Point atPoint = new System.Drawing.Point((int)x, (int)y - (int)size.Height - 1);
 
                     // Define BoundingBox options
-                    Pen pen = new Pen(Color.Yellow, 2.0f);
-                    SolidBrush colorBrush = new SolidBrush(Color.Yellow);
-
+                    Pen pen = new Pen(Color.Green, 2.0f);
+                    SolidBrush colorBrush = new SolidBrush(Color.Green);
+                    // if found NG
+                    if (pred.Label.Name == "NG")
+                    {
+                        pen = new Pen(Color.Red, 2.0f);
+                        colorBrush = new SolidBrush(Color.Red);
+                    }
+                    labelOBJ = pred.Label.Name;
                     // Draw text on image 
                     graphics.FillRectangle(colorBrush, (int)x, (int)(y - size.Height - 1), (int)size.Width, (int)size.Height);
                     graphics.DrawString(text, drawFont, fontBrush, atPoint);
