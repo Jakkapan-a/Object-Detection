@@ -22,7 +22,6 @@ namespace Object_Detection
             myCapture.OnFrameHeader += MyCapture_OnFrameHeader;
             myCapture.OnVideoStarted += MyCapture_OnVideoStarted;
             myCapture.OnError += MyCapture_OnError;
-
             cameraControl = new TControl();
         }
 
@@ -90,7 +89,6 @@ namespace Object_Detection
                 }
             }
         }
-
 
         private bool isConnect = false;
         private Task openTask;

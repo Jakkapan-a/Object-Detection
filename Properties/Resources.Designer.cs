@@ -70,6 +70,15 @@ namespace Object_Detection.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ./weight.
+        /// </summary>
+        internal static string path_weight {
+            get {
+                return ResourceManager.GetString("path_weight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Spinner_0_4s_800px {

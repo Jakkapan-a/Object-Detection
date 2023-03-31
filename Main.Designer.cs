@@ -40,6 +40,7 @@
             splitContainer2 = new SplitContainer();
             pictureBox1 = new PictureBox();
             label1 = new Label();
+            flowLayoutPanel1 = new FlowLayoutPanel();
             panel1 = new Panel();
             checkBox1 = new CheckBox();
             btnConnect = new Button();
@@ -47,6 +48,7 @@
             comboBox1 = new ComboBox();
             cbDrive = new ComboBox();
             label2 = new Label();
+            richTextBox1 = new RichTextBox();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -55,6 +57,7 @@
             splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
             splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.Panel2.SuspendLayout();
             splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel1.SuspendLayout();
@@ -134,6 +137,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(flowLayoutPanel1);
             splitContainer1.Panel2.Controls.Add(panel1);
             splitContainer1.Panel2.Controls.Add(label2);
             splitContainer1.Panel2.Padding = new Padding(5);
@@ -152,6 +156,10 @@
             // splitContainer2.Panel1
             // 
             splitContainer2.Panel1.Controls.Add(pictureBox1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            splitContainer2.Panel2.Controls.Add(richTextBox1);
             splitContainer2.Size = new Size(360, 352);
             splitContainer2.SplitterDistance = 239;
             splitContainer2.TabIndex = 1;
@@ -178,6 +186,14 @@
             label1.TabIndex = 0;
             label1.Text = "CAMERA";
             label1.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Dock = DockStyle.Fill;
+            flowLayoutPanel1.Location = new Point(5, 47);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(241, 350);
+            flowLayoutPanel1.TabIndex = 3;
             // 
             // panel1
             // 
@@ -254,6 +270,15 @@
             label2.Text = "RESULT";
             label2.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // richTextBox1
+            // 
+            richTextBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            richTextBox1.Location = new Point(3, 8);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(352, 96);
+            richTextBox1.TabIndex = 0;
+            richTextBox1.Text = "";
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -264,6 +289,7 @@
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Name = "Main";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";
             Load += Main_Load;
             menuStrip1.ResumeLayout(false);
@@ -275,6 +301,7 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             splitContainer2.Panel1.ResumeLayout(false);
+            splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -305,5 +332,7 @@
         private ComboBox comboBox1;
         private CheckBox checkBox1;
         private SplitContainer splitContainer2;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private RichTextBox richTextBox1;
     }
 }
