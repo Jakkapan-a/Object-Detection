@@ -11,6 +11,8 @@ using TClass;
 using System.IO.Ports;
 using System.Drawing.Drawing2D;
 using Yolo.Net;
+using System.Data;
+using Object_Detection.SQliteDataAccess;
 
 namespace Object_Detection
 {
@@ -137,10 +139,14 @@ namespace Object_Detection
                 if (labelOBJ == "NG")
                 {
                     serialCommand("ng");
+                    lbName.Text = "OK";
+                    lbName.BackColor = Color.Red;
                 }
                 else if (labelOBJ == "OK")
                 {
                     serialCommand("ok");
+                    lbName.Text = "OK";
+                    lbName.BackColor = Color.Green;
                 }
                 isObjDetect = false;
             }
@@ -200,37 +206,36 @@ namespace Object_Detection
                 openTask = Task.Run(() =>
                 {
                     myCapture.Start(camIndex);
+                    //cameraControl.set(camIndex);
                 });
-                cameraControl.set(camIndex);
                 await openTask;
+
+                //if (cbSerial.Checked)
+                //{
+                //    // Connect to serial port
+                //    if (this.serialPort != null && this.serialPort.IsOpen)
+                //    {
+                //        this.serialPort.Close();
+                //    }
+
+                //    serialPort.BaudRate = int.Parse(cbBaud.Text);
+                //    serialPort.PortName = cbCOM.Text;
+                //    serialPort.Open();
+                //}
+                //modules = SQliteDataAccess.Module.Get();
+
+                //if (File.Exists(Path.Combine(Properties.Resources.path_weight, modules[0].path)))
+                //{
+                //    yolo = YoloV5Predictor.Create(Path.Combine(Properties.Resources.path_weight, modules[0].filename), new string[] { "OK", "NG" });
+                //    Debug.WriteLine("NG");
+                //}
+                //else
+                //{
+                //    Debug.WriteLine("OK");
+                //}
                 btnConnect.Text = "Disconnect";
-
-                if (cbSerial.Checked)
-                {
-                    // Connect to serial port
-                    if (this.serialPort != null && this.serialPort.IsOpen)
-                    {
-                        this.serialPort.Close();
-                    }
-
-                    serialPort.BaudRate = int.Parse(cbBaud.Text);
-                    serialPort.PortName = cbCOM.Text;
-                    serialPort.Open();
-                }
-                modules = SQliteDataAccess.Module.Get();
-
-                if (File.Exists(Path.Combine(Properties.Resources.path_weight, modules[0].filename)))
-                {
-                    yolo = YoloV5Predictor.Create(Path.Combine(Properties.Resources.path_weight, modules[0].filename), new string[] { "OK", "NG" });
-                    Debug.WriteLine("NG");
-                }
-                else
-                {
-                    Debug.WriteLine("OK");
-                }
-
-
-
+                lbName.Text = "Processing..";
+                lbName.BackColor = Color.Yellow;
             }
             else
             {
@@ -319,11 +324,14 @@ namespace Object_Detection
                 if (data == "st")
                 {
                     isObjDetect = true;
-
+                    lbName.Text = "Processing..";
+                    lbName.BackColor = Color.Yellow;
                 }
                 else if (data == "rs")
                 {
                     predictions = null;
+                    lbName.Text = "Processing..";
+                    lbName.BackColor = Color.Yellow;
                 }
 
             }
@@ -435,6 +443,82 @@ namespace Object_Detection
 
             listModules = new Forms.ListModules();
             listModules.Show();
+        }
+
+        private void RenderData()
+        {
+            DataTable dt = CreateDataTable();
+
+            PopulateDataTable(dt);
+
+            SetupDataGridView(dt);
+
+            LoadImagesToDataGridView();
+        }
+
+        private DataTable CreateDataTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No", typeof(int));
+            dt.Columns.Add("id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("ImagePath", typeof(string));
+            dt.Columns.Add("Date", typeof(string));
+            return dt;
+        }
+
+        private void PopulateDataTable(DataTable dt)
+        {
+            //var modules = Module.Get();
+            //int rowNumber = 0;
+            //foreach (var item in modules)
+            //{
+            //    dt.Rows.Add(++rowNumber, item.id, item.name, item.path, item.image, item.updated_at);
+            //}
+        }
+
+
+        private void SetupDataGridView(DataTable dt)
+        {
+            // Clear the dataGridView1 before updating
+            dataGridView1.DataSource = null;
+            dataGridView1.Columns.Clear();
+            dataGridView1.Rows.Clear();
+            dataGridView1.ClearSelection();
+            dataGridView1.DataSource = dt;
+
+            DataGridViewImageColumn imageColumn = new DataGridViewImageColumn();
+            imageColumn.Name = "Image";
+            imageColumn.HeaderText = "Image";
+            imageColumn.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            imageColumn.Width = 100;
+            dataGridView1.Columns.Insert(4, imageColumn);
+            dataGridView1.RowTemplate.Height = 100;
+            dataGridView1.Columns["ImagePath"].Visible = false;
+            dataGridView1.Columns["id"].Visible = false;
+
+            DataGridViewImageColumn imageColumn2 = new DataGridViewImageColumn();
+            imageColumn2.Name = "Detect";
+            imageColumn2.HeaderText = "Detect";
+            imageColumn2.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            imageColumn2.Width = 100;
+            dataGridView1.Columns.Insert(4, imageColumn2);
+            dataGridView1.RowTemplate.Height = 100;
+            dataGridView1.Columns["DetectPage"].Visible = false;
+            dataGridView1.Columns["id"].Visible = false;
+
+            dataGridView1.Columns["No"].Width = (int)(dataGridView1.Width * 0.1);
+            dataGridView1.Columns["Date"].Width = (int)(dataGridView1.Width * 0.15);
+            dataGridView1.ClearSelection();
+        }
+
+        private void LoadImagesToDataGridView()
+        {
+            for (int i = 0; i < dataGridView1.Rows.Count; i++)
+            {
+                dataGridView1.Rows[i].Cells["Image"].Value = Image.FromFile(Path.Combine(Properties.Resources.path_images, dataGridView1.Rows[i].Cells["ImagePath"].Value.ToString()));
+                dataGridView1.Rows[i].Height = 100;
+            }
         }
     }
 }

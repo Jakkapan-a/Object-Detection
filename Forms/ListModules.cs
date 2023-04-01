@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Object_Detection.Forms
@@ -43,6 +44,37 @@ namespace Object_Detection.Forms
 
         private void BgWorker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
         {
+            if (id == -1)
+            {
+                var module = new Module()
+                {
+                    name = txtName.Text,
+                    path = newModuleName,
+                    image = newImageName,
+                };
+                module.status = cbActive.Checked ? 1 : 0;
+                module.Save();
+            }
+            else
+            {
+                var module = Module.Get(id).FirstOrDefault();
+                module.name = txtName.Text;
+                if (!string.IsNullOrEmpty(newModuleName))
+                    module.path = newModuleName;
+                if (!string.IsNullOrEmpty(newImageName))
+                    module.image = newImageName;
+
+                module.status = cbActive.Checked ? 1 : 0;
+
+                module.Update();
+            }
+            // Visible progress bar
+            toolStripProgressBarUpload1.Visible = false;
+            toolStripProgressBarUpload2.Visible = false;
+
+            RenderData();
+
+            btnClear.PerformClick();
 
             if (e.Error != null)
             {
@@ -59,66 +91,54 @@ namespace Object_Detection.Forms
                 // Handle the case when operation completed successfully
                 MessageBox.Show("Operation completed successfully.");
             }
-
-            if (id == -1)
-            {
-                var module = new Module()
-                {
-                    name = txtName.Text,
-                    filename = newModuleName,
-                    image = newImageName,
-
-                };
-                module.status = cbActive.Checked ? 1 : 0;
-                module.Save();
-            }
-            else
-            {
-
-            }
-            // Visible progress bar
-            toolStripProgressBarUpload1.Visible = false;
-            toolStripProgressBarUpload2.Visible = false;
         }
 
         private void BgWorker_DoWork(object? sender, DoWorkEventArgs e)
         {
             var worker = sender as BackgroundWorker;
 
-            newModuleName = Guid.NewGuid().ToString() + txtName.Text + ".onnx";
-            newImageName = Guid.NewGuid().ToString() + txtName.Text + ".jpg";
-
-            // Use the correct paths for the source files
-            string sourceModulePath = pathModule;
-            string sourceImagePath = pathImage;
-
-            string destinationModulePath = Path.Combine(Properties.Resources.path_weight, newModuleName);
-            string destinationImagePath = Path.Combine(Properties.Resources.path_images, newImageName);
-
-            var argsModule = new CopyFileArguments { SourcePath = sourceModulePath, DestinationPath = destinationModulePath };
-            var argsImage = new CopyFileArguments { SourcePath = sourceImagePath, DestinationPath = destinationImagePath };
-
-            // Create two instances of BackgroundWorker
-            var worker1 = new BackgroundWorker { WorkerReportsProgress = true };
-            var worker2 = new BackgroundWorker { WorkerReportsProgress = true };
-
-            // Update progress bars separately
-            worker1.ProgressChanged += (s, e) => Invoke(new Action(() => toolStripProgressBarUpload1.Value = e.ProgressPercentage));
-            worker2.ProgressChanged += (s, e) => Invoke(new Action(() => toolStripProgressBarUpload2.Value = e.ProgressPercentage));
-
-
-            // Assign event handlers
-            worker1.DoWork += (s, e) => CopyFile.CopyFileWithProgress(argsModule.SourcePath, argsModule.DestinationPath, worker1);
-            worker2.DoWork += (s, e) => CopyFile.CopyFileWithProgress(argsImage.SourcePath, argsImage.DestinationPath, worker2);
-
-            // Run the workers
-            worker1.RunWorkerAsync();
-            worker2.RunWorkerAsync();
-
-            // Wait for both workers to complete
-            while (worker1.IsBusy || worker2.IsBusy)
+            if (id == -1)
             {
-                Thread.Sleep(100); // Sleep for a short period to prevent blocking the UI
+                newModuleName = Guid.NewGuid().ToString() + txtName.Text + ".onnx";
+                newImageName = Guid.NewGuid().ToString() + txtName.Text + ".jpg";
+
+                // Use the correct paths for the source files
+                string sourceModulePath = pathModule;
+                string sourceImagePath = pathImage;
+
+                string destinationModulePath = Path.Combine(Properties.Resources.path_weight, newModuleName);
+                string destinationImagePath = Path.Combine(Properties.Resources.path_images, newImageName);
+
+                var argsModule = new CopyFileArguments { SourcePath = sourceModulePath, DestinationPath = destinationModulePath };
+                var argsImage = new CopyFileArguments { SourcePath = sourceImagePath, DestinationPath = destinationImagePath };
+
+                // Create two instances of BackgroundWorker
+                var worker1 = new BackgroundWorker { WorkerReportsProgress = true };
+                var worker2 = new BackgroundWorker { WorkerReportsProgress = true };
+
+                // Update progress bars separately
+                worker1.ProgressChanged += (s, e) => Invoke(new Action(() => toolStripProgressBarUpload1.Value = e.ProgressPercentage));
+                worker2.ProgressChanged += (s, e) => Invoke(new Action(() => toolStripProgressBarUpload2.Value = e.ProgressPercentage));
+
+
+                // Assign event handlers
+                worker1.DoWork += (s, e) => CopyFile.CopyFileWithProgress(argsModule.SourcePath, argsModule.DestinationPath, worker1);
+                worker2.DoWork += (s, e) => CopyFile.CopyFileWithProgress(argsImage.SourcePath, argsImage.DestinationPath, worker2);
+
+                // Run the workers
+                worker1.RunWorkerAsync();
+                worker2.RunWorkerAsync();
+
+                // Wait for both workers to complete
+                while (worker1.IsBusy || worker2.IsBusy)
+                {
+                    Thread.Sleep(100); // Sleep for a short period to prevent blocking the UI
+                }
+            }
+            else
+            {
+                newModuleName = string.Empty;
+                newImageName = string.Empty;
             }
         }
 
@@ -184,22 +204,15 @@ namespace Object_Detection.Forms
                 return;
             }
 
+            // Check bgWorker is running or not
+            if (bgWorker.IsBusy)
+            {
+                MessageBox.Show("Please wait for the current process to complete", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            // Save new module
+            bgWorker.RunWorkerAsync();
 
-            if (id == -1)
-            {
-                // Check bgWorker is running or not
-                if (bgWorker.IsBusy)
-                {
-                    MessageBox.Show("Please wait for the current process to complete", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                // Save new module
-                bgWorker.RunWorkerAsync();
-            }
-            else
-            {
-                // Update module
-            }
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -210,6 +223,9 @@ namespace Object_Detection.Forms
             txtModule.Text = string.Empty;
             txtName.Text = string.Empty;
             pictureBoxTemp.Image?.Dispose();
+            pictureBoxTemp.Image = null;
+
+            toolStripStatusLabelId.Text = "ID :" + id;
 
         }
 
@@ -238,6 +254,122 @@ namespace Object_Detection.Forms
                 txtImage.Text = pathImage;
                 pictureBoxTemp.Image = Image.FromFile(pathImage);
             }
+        }
+
+        private void RenderData()
+        {
+            DataTable dt = CreateDataTable();
+
+            PopulateDataTable(dt);
+
+            SetupDataGridView(dt);
+
+            LoadImagesToDataGridView();
+        }
+
+        private DataTable CreateDataTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No", typeof(int));
+            dt.Columns.Add("id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("ONNX", typeof(string));
+            dt.Columns.Add("ImagePath", typeof(string));
+            dt.Columns.Add("Date", typeof(string));
+            return dt;
+        }
+
+        private void PopulateDataTable(DataTable dt)
+        {
+            var modules = Module.Get();
+            int rowNumber = 0;
+            foreach (var item in modules)
+            {
+                dt.Rows.Add(++rowNumber, item.id, item.name, item.path, item.image, item.updated_at);
+            }
+        }
+
+
+        private void SetupDataGridView(DataTable dt)
+        {
+            // Clear the dataGridView1 before updating
+            dataGridView1.DataSource = null;
+            dataGridView1.Columns.Clear();
+            dataGridView1.Rows.Clear();
+            dataGridView1.ClearSelection();
+            dataGridView1.DataSource = dt;
+
+            DataGridViewImageColumn imageColumn = new DataGridViewImageColumn();
+            imageColumn.Name = "Image";
+            imageColumn.HeaderText = "Image";
+            imageColumn.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            imageColumn.Width = 100;
+            dataGridView1.Columns.Insert(4, imageColumn);
+            dataGridView1.RowTemplate.Height = 100;
+            dataGridView1.Columns["ImagePath"].Visible = false;
+            dataGridView1.Columns["id"].Visible = false;
+            
+            dataGridView1.Columns["No"].Width = (int)(dataGridView1.Width * 0.1);
+            dataGridView1.Columns["Date"].Width = (int)(dataGridView1.Width * 0.15);
+            dataGridView1.ClearSelection();
+        }
+
+        private void LoadImagesToDataGridView()
+        {
+            for (int i = 0; i < dataGridView1.Rows.Count; i++)
+            {
+                dataGridView1.Rows[i].Cells["Image"].Value = Image.FromFile(Path.Combine(Properties.Resources.path_images, dataGridView1.Rows[i].Cells["ImagePath"].Value.ToString()));
+                dataGridView1.Rows[i].Height = 100;
+            }
+        }
+        private bool loaded = false;
+        private void ListModules_Load(object sender, EventArgs e)
+        {
+            RenderData();
+            loaded = true;
+        }
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            if (!loaded)
+            {
+                return;
+            }
+            if (dataGridView1.SelectedCells.Count > 0)
+            {
+                // Get the index of the selected row
+                int rowIndex = dataGridView1.SelectedCells[0].RowIndex;
+
+                // Get the DataGridViewRow object at the specified index
+                DataGridViewRow selectedRow = dataGridView1.Rows[rowIndex];
+
+                // Get the values from the selected row
+                id = (int)selectedRow.Cells["id"].Value;
+
+                string imagePath = Convert.ToString(selectedRow.Cells["ImagePath"].Value);
+                string fullPathToImage = Path.Combine(Properties.Resources.path_images, imagePath);
+                pictureBoxTemp.Image?.Dispose();
+                pictureBoxTemp.Image = Image.FromFile(fullPathToImage);
+                txtImage.Text = fullPathToImage;
+                pathImage = fullPathToImage;
+
+                string onnxPath = Convert.ToString(selectedRow.Cells["ONNX"].Value);
+                string fullPathToModule = Path.Combine(Properties.Resources.path_weight, onnxPath);
+                txtModule.Text = fullPathToModule;
+                pathModule = fullPathToModule;
+
+                txtName.Text = Convert.ToString(selectedRow.Cells["Name"].Value);
+                btnSave.Text = "Update";
+
+                toolStripStatusLabelId.Text = "ID :" + id;
+            }
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var module = Module.Get(id).FirstOrDefault();
+            module.Delete();
+            RenderData();
         }
     }
 }

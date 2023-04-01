@@ -103,7 +103,6 @@ namespace Object_Detection.Forms
             module.path = newPath;
             module.filename = newFilename;
             module.Save();
-
         }
        
     }

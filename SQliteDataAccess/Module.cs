@@ -36,7 +36,7 @@ namespace Object_Detection.SQliteDataAccess
                             PRIMARY KEY('id' AUTOINCREMENT));";
 
             // SQL Insert Module
-            SQliteDataAccess.Execute(sql);
+            SQliteDataAccess.Execute(sql, null);
         }
 
         public void Save(){
@@ -54,7 +54,7 @@ namespace Object_Detection.SQliteDataAccess
         }
 
         public void Update(){
-            string sql = @"UPDATE module SET name = @name, description = @description, filename = @filename, path = @path, image = @image, status = @status, created_at = @created_at, updated_at = @updated_at WHERE id = @id";
+            string sql = @"UPDATE module SET name = @name, description = @description, filename = @filename, path = @path, image = @image, status = @status, updated_at = @updated_at WHERE id = @id";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", id);
             parameters.Add("@name", name);

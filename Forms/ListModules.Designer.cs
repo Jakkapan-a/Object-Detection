@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             statusStrip1 = new StatusStrip();
-            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            toolStripStatusLabelId = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
             toolStripProgressBarUpload1 = new ToolStripProgressBar();
             toolStripProgressBarUpload2 = new ToolStripProgressBar();
@@ -52,28 +53,31 @@
             btnClear = new Button();
             dataGridView1 = new DataGridView();
             label6 = new Label();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            deleteToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxTemp).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip1
             // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabel2, toolStripProgressBarUpload1, toolStripProgressBarUpload2 });
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabelId, toolStripStatusLabel2, toolStripProgressBarUpload1, toolStripProgressBarUpload2 });
             statusStrip1.Location = new Point(0, 489);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(841, 22);
             statusStrip1.TabIndex = 0;
             statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripStatusLabel1
+            // toolStripStatusLabelId
             // 
-            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(118, 17);
-            toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            toolStripStatusLabelId.Name = "toolStripStatusLabelId";
+            toolStripStatusLabelId.Size = new Size(118, 17);
+            toolStripStatusLabelId.Text = "toolStripStatusLabel1";
             // 
             // toolStripStatusLabel2
             // 
@@ -281,13 +285,20 @@
             // 
             // dataGridView1
             // 
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.ContextMenuStrip = contextMenuStrip1;
             dataGridView1.Location = new Point(9, 107);
             dataGridView1.Name = "dataGridView1";
+            dataGridView1.ReadOnly = true;
             dataGridView1.RowTemplate.Height = 25;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(533, 377);
             dataGridView1.TabIndex = 5;
+            dataGridView1.SelectionChanged += dataGridView1_SelectionChanged;
             // 
             // label6
             // 
@@ -298,6 +309,20 @@
             label6.TabIndex = 0;
             label6.Text = "Table";
             label6.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { deleteToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(108, 26);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            deleteToolStripMenuItem.Image = Properties.Resources.Trash_32;
+            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            deleteToolStripMenuItem.Size = new Size(107, 22);
+            deleteToolStripMenuItem.Text = "Delete";
+            deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
             // ListModules
             // 
@@ -311,6 +336,7 @@
             Controls.Add(statusStrip1);
             Name = "ListModules";
             Text = "ListModules";
+            Load += ListModules_Load;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             panel1.ResumeLayout(false);
@@ -319,6 +345,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxTemp).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -326,7 +353,7 @@
         #endregion
 
         private StatusStrip statusStrip1;
-        private ToolStripStatusLabel toolStripStatusLabel1;
+        private ToolStripStatusLabel toolStripStatusLabelId;
         private Button btnSave;
         private TextBox txtModule;
         private Button btnModule;
@@ -349,5 +376,7 @@
         private ToolStripProgressBar toolStripProgressBarUpload1;
         private CheckBox cbActive;
         private ToolStripProgressBar toolStripProgressBarUpload2;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem deleteToolStripMenuItem;
     }
 }

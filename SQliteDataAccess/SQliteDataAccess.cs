@@ -29,7 +29,7 @@ namespace Object_Detection.SQliteDataAccess
             return ExecuteQuery<T>(sql);
         }
 
-        public static void Execute(string sql, Dictionary<string, object>? parameters = null)
+        public static void Execute(string sql, Dictionary<string, object> parameters)
         {
             using (IDbConnection con = new SQLiteConnection(LoadConnectionString()))
             {

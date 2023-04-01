@@ -32,8 +32,10 @@
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             uploadModuleToolStripMenuItem = new ToolStripMenuItem();
+            listModuleToolStripMenuItem = new ToolStripMenuItem();
             imageToolStripMenuItem = new ToolStripMenuItem();
             captureToolStripMenuItem = new ToolStripMenuItem();
+            uploadMasterImageToolStripMenuItem = new ToolStripMenuItem();
             cameraToolStripMenuItem = new ToolStripMenuItem();
             settingToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
@@ -47,7 +49,8 @@
             richTextBox1 = new RichTextBox();
             label1 = new Label();
             panel2 = new Panel();
-            dataGridView = new DataGridView();
+            richTextBox2 = new RichTextBox();
+            dataGridView1 = new DataGridView();
             lbName = new Label();
             panel1 = new Panel();
             pictureBox2 = new PictureBox();
@@ -59,9 +62,6 @@
             label2 = new Label();
             contextMenuStripDeleteModule = new ContextMenuStrip(components);
             deleteToolStripMenuItem = new ToolStripMenuItem();
-            uploadMasterImageToolStripMenuItem = new ToolStripMenuItem();
-            listModuleToolStripMenuItem = new ToolStripMenuItem();
-            richTextBox2 = new RichTextBox();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -74,7 +74,7 @@
             splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             contextMenuStripDeleteModule.SuspendLayout();
@@ -99,9 +99,16 @@
             // uploadModuleToolStripMenuItem
             // 
             uploadModuleToolStripMenuItem.Name = "uploadModuleToolStripMenuItem";
-            uploadModuleToolStripMenuItem.Size = new Size(180, 22);
+            uploadModuleToolStripMenuItem.Size = new Size(156, 22);
             uploadModuleToolStripMenuItem.Text = "Upload module";
             uploadModuleToolStripMenuItem.Click += uploadModuleToolStripMenuItem_Click;
+            // 
+            // listModuleToolStripMenuItem
+            // 
+            listModuleToolStripMenuItem.Name = "listModuleToolStripMenuItem";
+            listModuleToolStripMenuItem.Size = new Size(156, 22);
+            listModuleToolStripMenuItem.Text = "List module";
+            listModuleToolStripMenuItem.Click += listModuleToolStripMenuItem_Click;
             // 
             // imageToolStripMenuItem
             // 
@@ -117,6 +124,12 @@
             captureToolStripMenuItem.Size = new Size(187, 22);
             captureToolStripMenuItem.Text = "Capture";
             captureToolStripMenuItem.Click += captureToolStripMenuItem_Click;
+            // 
+            // uploadMasterImageToolStripMenuItem
+            // 
+            uploadMasterImageToolStripMenuItem.Name = "uploadMasterImageToolStripMenuItem";
+            uploadMasterImageToolStripMenuItem.Size = new Size(187, 22);
+            uploadMasterImageToolStripMenuItem.Text = "Upload Master Image";
             // 
             // cameraToolStripMenuItem
             // 
@@ -245,7 +258,7 @@
             // panel2
             // 
             panel2.Controls.Add(richTextBox2);
-            panel2.Controls.Add(dataGridView);
+            panel2.Controls.Add(dataGridView1);
             panel2.Controls.Add(lbName);
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(5, 47);
@@ -253,14 +266,24 @@
             panel2.Size = new Size(432, 500);
             panel2.TabIndex = 3;
             // 
-            // dataGridView
+            // richTextBox2
             // 
-            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView.Location = new Point(0, 124);
-            dataGridView.Name = "dataGridView";
-            dataGridView.RowTemplate.Height = 25;
-            dataGridView.Size = new Size(423, 210);
-            dataGridView.TabIndex = 6;
+            richTextBox2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            richTextBox2.Location = new Point(3, 351);
+            richTextBox2.Name = "richTextBox2";
+            richTextBox2.Size = new Size(420, 146);
+            richTextBox2.TabIndex = 0;
+            richTextBox2.Text = "";
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(0, 52);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowTemplate.Height = 25;
+            dataGridView1.Size = new Size(423, 282);
+            dataGridView1.TabIndex = 6;
             // 
             // lbName
             // 
@@ -375,28 +398,6 @@
             deleteToolStripMenuItem.Size = new Size(107, 22);
             deleteToolStripMenuItem.Text = "Delete";
             // 
-            // uploadMasterImageToolStripMenuItem
-            // 
-            uploadMasterImageToolStripMenuItem.Name = "uploadMasterImageToolStripMenuItem";
-            uploadMasterImageToolStripMenuItem.Size = new Size(187, 22);
-            uploadMasterImageToolStripMenuItem.Text = "Upload Master Image";
-            // 
-            // listModuleToolStripMenuItem
-            // 
-            listModuleToolStripMenuItem.Name = "listModuleToolStripMenuItem";
-            listModuleToolStripMenuItem.Size = new Size(180, 22);
-            listModuleToolStripMenuItem.Text = "List module";
-            listModuleToolStripMenuItem.Click += listModuleToolStripMenuItem_Click;
-            // 
-            // richTextBox2
-            // 
-            richTextBox2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            richTextBox2.Location = new Point(3, 351);
-            richTextBox2.Name = "richTextBox2";
-            richTextBox2.Size = new Size(420, 146);
-            richTextBox2.TabIndex = 0;
-            richTextBox2.Text = "";
-            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -424,7 +425,7 @@
             splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
@@ -464,7 +465,7 @@
         private ToolStripStatusLabel toolStripStatusError;
         private ToolStripStatusLabel toolStripStatusSerialData;
         private ToolStripMenuItem uploadModuleToolStripMenuItem;
-        private DataGridView dataGridView;
+        private DataGridView dataGridView1;
         private ToolStripMenuItem uploadMasterImageToolStripMenuItem;
         private ToolStripMenuItem listModuleToolStripMenuItem;
         private RichTextBox richTextBox2;
