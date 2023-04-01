@@ -13,6 +13,7 @@ namespace Object_Detection.SQliteDataAccess
         public string description { get; set; }
         public string filename { get; set; }
         public string path { get; set; }
+        public string image { get; set; }
         public int status { get; set; } = 1;
         public string created_at { get; set; }
         public string updated_at { get; set; }
@@ -28,6 +29,7 @@ namespace Object_Detection.SQliteDataAccess
                             'description'	TEXT,
                             'filename'	TEXT,
                             'path'	TEXT,
+                            'image'	TEXT,
                             'status'	INTEGER,
                             'created_at'	TEXT,
                             'updated_at'	TEXT,
@@ -38,12 +40,13 @@ namespace Object_Detection.SQliteDataAccess
         }
 
         public void Save(){
-            string sql = @"INSERT INTO module (name, description, filename, path, status, created_at, updated_at) VALUES (@name, @description, @filename, @path, @status, @created_at, @updated_at)";
+            string sql = @"INSERT INTO module (name, description, filename, path, image, status, created_at, updated_at) VALUES (@name, @description, @filename, @path, @image, @status, @created_at, @updated_at)";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@name", name);
             parameters.Add("@description", description);
             parameters.Add("@filename", filename);
             parameters.Add("@path", path);
+            parameters.Add("@image", image);
             parameters.Add("@status", status);
             parameters.Add("@created_at", SQliteDataAccess.GetDateTimeNow());
             parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
@@ -51,13 +54,14 @@ namespace Object_Detection.SQliteDataAccess
         }
 
         public void Update(){
-            string sql = @"UPDATE module SET name = @name, description = @description, filename = @filename, path = @path, status = @status, created_at = @created_at, updated_at = @updated_at WHERE id = @id";
+            string sql = @"UPDATE module SET name = @name, description = @description, filename = @filename, path = @path, image = @image, status = @status, created_at = @created_at, updated_at = @updated_at WHERE id = @id";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", id);
             parameters.Add("@name", name);
             parameters.Add("@description", description);
             parameters.Add("@filename", filename);
             parameters.Add("@path", path);
+            parameters.Add("@image", image);
             parameters.Add("@status", status);
             parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
             SQliteDataAccess.Execute(sql, parameters);

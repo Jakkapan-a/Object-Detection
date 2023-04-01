@@ -1,0 +1,310 @@
+﻿namespace Object_Detection.Forms
+{
+    partial class ListModules
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            statusStrip1 = new StatusStrip();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            btnSave = new Button();
+            txtModule = new TextBox();
+            btnModule = new Button();
+            btnImage = new Button();
+            txtImage = new TextBox();
+            txtName = new TextBox();
+            panel1 = new Panel();
+            label5 = new Label();
+            panel2 = new Panel();
+            label3 = new Label();
+            label2 = new Label();
+            label1 = new Label();
+            pictureBox = new PictureBox();
+            pictureBox1 = new PictureBox();
+            label4 = new Label();
+            btnClear = new Button();
+            dataGridView1 = new DataGridView();
+            label6 = new Label();
+            statusStrip1.SuspendLayout();
+            panel1.SuspendLayout();
+            panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            SuspendLayout();
+            // 
+            // statusStrip1
+            // 
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1 });
+            statusStrip1.Location = new Point(0, 489);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(841, 22);
+            statusStrip1.TabIndex = 0;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(118, 17);
+            toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
+            // btnSave
+            // 
+            btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnSave.Location = new Point(204, 380);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(75, 23);
+            btnSave.TabIndex = 2;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
+            // 
+            // txtModule
+            // 
+            txtModule.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtModule.Location = new Point(75, 169);
+            txtModule.Name = "txtModule";
+            txtModule.Size = new Size(169, 23);
+            txtModule.TabIndex = 0;
+            // 
+            // btnModule
+            // 
+            btnModule.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            btnModule.Location = new Point(252, 168);
+            btnModule.Name = "btnModule";
+            btnModule.Size = new Size(27, 23);
+            btnModule.TabIndex = 1;
+            btnModule.Text = "...";
+            btnModule.UseVisualStyleBackColor = true;
+            // 
+            // btnImage
+            // 
+            btnImage.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            btnImage.Location = new Point(252, 213);
+            btnImage.Name = "btnImage";
+            btnImage.Size = new Size(27, 23);
+            btnImage.TabIndex = 1;
+            btnImage.Text = "...";
+            btnImage.UseVisualStyleBackColor = true;
+            // 
+            // txtImage
+            // 
+            txtImage.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtImage.Location = new Point(75, 213);
+            txtImage.Name = "txtImage";
+            txtImage.Size = new Size(169, 23);
+            txtImage.TabIndex = 0;
+            // 
+            // txtName
+            // 
+            txtName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtName.Location = new Point(75, 129);
+            txtName.Name = "txtName";
+            txtName.Size = new Size(204, 23);
+            txtName.TabIndex = 0;
+            // 
+            // panel1
+            // 
+            panel1.BackColor = SystemColors.ButtonFace;
+            panel1.Controls.Add(label5);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(841, 80);
+            panel1.TabIndex = 3;
+            // 
+            // label5
+            // 
+            label5.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            label5.Font = new Font("Segoe UI", 18F, FontStyle.Italic, GraphicsUnit.Point);
+            label5.Location = new Point(12, 18);
+            label5.Name = "label5";
+            label5.Size = new Size(817, 44);
+            label5.TabIndex = 0;
+            label5.Text = "List Modules";
+            label5.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // panel2
+            // 
+            panel2.BackColor = SystemColors.ControlLight;
+            panel2.BorderStyle = BorderStyle.FixedSingle;
+            panel2.Controls.Add(label3);
+            panel2.Controls.Add(label2);
+            panel2.Controls.Add(label1);
+            panel2.Controls.Add(pictureBox);
+            panel2.Controls.Add(pictureBox1);
+            panel2.Controls.Add(txtName);
+            panel2.Controls.Add(label4);
+            panel2.Controls.Add(btnModule);
+            panel2.Controls.Add(txtModule);
+            panel2.Controls.Add(btnClear);
+            panel2.Controls.Add(btnSave);
+            panel2.Controls.Add(btnImage);
+            panel2.Controls.Add(txtImage);
+            panel2.Dock = DockStyle.Right;
+            panel2.Location = new Point(548, 80);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(293, 409);
+            panel2.TabIndex = 4;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(21, 217);
+            label3.Name = "label3";
+            label3.Size = new Size(40, 15);
+            label3.TabIndex = 4;
+            label3.Text = "Image";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(21, 177);
+            label2.Name = "label2";
+            label2.Size = new Size(48, 15);
+            label2.TabIndex = 4;
+            label2.Text = "Module";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(29, 134);
+            label1.Name = "label1";
+            label1.Size = new Size(39, 15);
+            label1.TabIndex = 4;
+            label1.Text = "Name";
+            // 
+            // pictureBox
+            // 
+            pictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pictureBox.BackColor = SystemColors.Control;
+            pictureBox.Location = new Point(75, 260);
+            pictureBox.Name = "pictureBox";
+            pictureBox.Size = new Size(169, 107);
+            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox.TabIndex = 3;
+            pictureBox.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pictureBox1.Image = Properties.Resources.ONNX_logo_main;
+            pictureBox1.Location = new Point(75, 22);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(169, 81);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 3;
+            pictureBox1.TabStop = false;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 8.25F, FontStyle.Underline, GraphicsUnit.Point);
+            label4.ForeColor = Color.Red;
+            label4.Location = new Point(182, 195);
+            label4.Name = "label4";
+            label4.Size = new Size(99, 13);
+            label4.TabIndex = 3;
+            label4.Text = "Use only onnx file";
+            // 
+            // btnClear
+            // 
+            btnClear.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnClear.Location = new Point(3, 383);
+            btnClear.Name = "btnClear";
+            btnClear.Size = new Size(75, 23);
+            btnClear.TabIndex = 2;
+            btnClear.Text = "Clear";
+            btnClear.UseVisualStyleBackColor = true;
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(9, 107);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowTemplate.Height = 25;
+            dataGridView1.Size = new Size(533, 379);
+            dataGridView1.TabIndex = 5;
+            // 
+            // label6
+            // 
+            label6.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            label6.Font = new Font("Segoe UI", 9F, FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point);
+            label6.Location = new Point(9, 83);
+            label6.Name = "label6";
+            label6.Size = new Size(301, 21);
+            label6.TabIndex = 0;
+            label6.Text = "Table";
+            label6.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // ListModules
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(841, 511);
+            Controls.Add(label6);
+            Controls.Add(dataGridView1);
+            Controls.Add(panel2);
+            Controls.Add(panel1);
+            Controls.Add(statusStrip1);
+            Name = "ListModules";
+            Text = "ListModules";
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel toolStripStatusLabel1;
+        private Button btnSave;
+        private TextBox txtModule;
+        private Button btnModule;
+        private Button btnImage;
+        private TextBox txtImage;
+        private TextBox txtName;
+        private Panel panel1;
+        private Panel panel2;
+        private PictureBox pictureBox1;
+        private PictureBox pictureBox;
+        private DataGridView dataGridView1;
+        private Label label4;
+        private Label label3;
+        private Label label2;
+        private Label label1;
+        private Label label5;
+        private Label label6;
+        private Button btnClear;
+    }
+}

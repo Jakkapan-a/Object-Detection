@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
+            uploadModuleToolStripMenuItem = new ToolStripMenuItem();
             imageToolStripMenuItem = new ToolStripMenuItem();
             captureToolStripMenuItem = new ToolStripMenuItem();
             cameraToolStripMenuItem = new ToolStripMenuItem();
@@ -46,8 +47,8 @@
             richTextBox1 = new RichTextBox();
             label1 = new Label();
             panel2 = new Panel();
+            dataGridView = new DataGridView();
             lbName = new Label();
-            flowLayoutPanel1 = new FlowLayoutPanel();
             panel1 = new Panel();
             pictureBox2 = new PictureBox();
             cbSerial = new CheckBox();
@@ -58,7 +59,9 @@
             label2 = new Label();
             contextMenuStripDeleteModule = new ContextMenuStrip(components);
             deleteToolStripMenuItem = new ToolStripMenuItem();
-            uploadModuleToolStripMenuItem = new ToolStripMenuItem();
+            uploadMasterImageToolStripMenuItem = new ToolStripMenuItem();
+            listModuleToolStripMenuItem = new ToolStripMenuItem();
+            richTextBox2 = new RichTextBox();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -71,6 +74,7 @@
             splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             contextMenuStripDeleteModule.SuspendLayout();
@@ -81,20 +85,27 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, imageToolStripMenuItem, cameraToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 24);
+            menuStrip1.Size = new Size(1154, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { uploadModuleToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { uploadModuleToolStripMenuItem, listModuleToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
             // 
+            // uploadModuleToolStripMenuItem
+            // 
+            uploadModuleToolStripMenuItem.Name = "uploadModuleToolStripMenuItem";
+            uploadModuleToolStripMenuItem.Size = new Size(180, 22);
+            uploadModuleToolStripMenuItem.Text = "Upload module";
+            uploadModuleToolStripMenuItem.Click += uploadModuleToolStripMenuItem_Click;
+            // 
             // imageToolStripMenuItem
             // 
-            imageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { captureToolStripMenuItem });
+            imageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { captureToolStripMenuItem, uploadMasterImageToolStripMenuItem });
             imageToolStripMenuItem.Name = "imageToolStripMenuItem";
             imageToolStripMenuItem.Size = new Size(52, 20);
             imageToolStripMenuItem.Text = "Image";
@@ -103,7 +114,7 @@
             // 
             captureToolStripMenuItem.Name = "captureToolStripMenuItem";
             captureToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Z;
-            captureToolStripMenuItem.Size = new Size(180, 22);
+            captureToolStripMenuItem.Size = new Size(187, 22);
             captureToolStripMenuItem.Text = "Capture";
             captureToolStripMenuItem.Click += captureToolStripMenuItem_Click;
             // 
@@ -117,16 +128,16 @@
             // settingToolStripMenuItem
             // 
             settingToolStripMenuItem.Name = "settingToolStripMenuItem";
-            settingToolStripMenuItem.Size = new Size(180, 22);
+            settingToolStripMenuItem.Size = new Size(119, 22);
             settingToolStripMenuItem.Text = "Controls";
             settingToolStripMenuItem.Click += settingToolStripMenuItem_Click;
             // 
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel, toolStripStatusSerial, toolStripStatusError, toolStripStatusSerialData });
-            statusStrip1.Location = new Point(0, 426);
+            statusStrip1.Location = new Point(0, 578);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(800, 24);
+            statusStrip1.Size = new Size(1154, 24);
             statusStrip1.TabIndex = 1;
             statusStrip1.Text = "statusStrip1";
             // 
@@ -176,8 +187,8 @@
             splitContainer1.Panel2.Controls.Add(panel1);
             splitContainer1.Panel2.Controls.Add(label2);
             splitContainer1.Panel2.Padding = new Padding(5);
-            splitContainer1.Size = new Size(800, 402);
-            splitContainer1.SplitterDistance = 370;
+            splitContainer1.Size = new Size(1154, 554);
+            splitContainer1.SplitterDistance = 533;
             splitContainer1.TabIndex = 2;
             // 
             // splitContainer2
@@ -195,8 +206,8 @@
             // splitContainer2.Panel2
             // 
             splitContainer2.Panel2.Controls.Add(richTextBox1);
-            splitContainer2.Size = new Size(360, 350);
-            splitContainer2.SplitterDistance = 237;
+            splitContainer2.Size = new Size(523, 502);
+            splitContainer2.SplitterDistance = 339;
             splitContainer2.TabIndex = 1;
             // 
             // pictureBox1
@@ -205,7 +216,7 @@
             pictureBox1.BackColor = SystemColors.ControlLight;
             pictureBox1.Location = new Point(6, 3);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(349, 229);
+            pictureBox1.Size = new Size(512, 331);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 1;
             pictureBox1.TabStop = false;
@@ -215,7 +226,7 @@
             richTextBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             richTextBox1.Location = new Point(3, 8);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(352, 96);
+            richTextBox1.Size = new Size(515, 146);
             richTextBox1.TabIndex = 0;
             richTextBox1.Text = "";
             // 
@@ -226,20 +237,30 @@
             label1.Font = new Font("Comic Sans MS", 18F, FontStyle.Regular, GraphicsUnit.Point);
             label1.Location = new Point(5, 5);
             label1.Name = "label1";
-            label1.Size = new Size(360, 42);
+            label1.Size = new Size(523, 42);
             label1.TabIndex = 0;
             label1.Text = "CAMERA";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // panel2
             // 
+            panel2.Controls.Add(richTextBox2);
+            panel2.Controls.Add(dataGridView);
             panel2.Controls.Add(lbName);
-            panel2.Controls.Add(flowLayoutPanel1);
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(5, 47);
             panel2.Name = "panel2";
-            panel2.Size = new Size(241, 348);
+            panel2.Size = new Size(432, 500);
             panel2.TabIndex = 3;
+            // 
+            // dataGridView
+            // 
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.Location = new Point(0, 124);
+            dataGridView.Name = "dataGridView";
+            dataGridView.RowTemplate.Height = 25;
+            dataGridView.Size = new Size(423, 210);
+            dataGridView.TabIndex = 6;
             // 
             // lbName
             // 
@@ -248,19 +269,10 @@
             lbName.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
             lbName.Location = new Point(3, 3);
             lbName.Name = "lbName";
-            lbName.Size = new Size(232, 43);
+            lbName.Size = new Size(423, 43);
             lbName.TabIndex = 5;
             lbName.Text = "---";
             lbName.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // flowLayoutPanel1
-            // 
-            flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            flowLayoutPanel1.Location = new Point(3, 52);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(232, 293);
-            flowLayoutPanel1.TabIndex = 4;
-            flowLayoutPanel1.Resize += flowLayoutPanel1_Resize;
             // 
             // panel1
             // 
@@ -272,9 +284,9 @@
             panel1.Controls.Add(cbBaud);
             panel1.Controls.Add(cbDrive);
             panel1.Dock = DockStyle.Right;
-            panel1.Location = new Point(246, 47);
+            panel1.Location = new Point(437, 47);
             panel1.Name = "panel1";
-            panel1.Size = new Size(173, 348);
+            panel1.Size = new Size(173, 500);
             panel1.TabIndex = 2;
             // 
             // pictureBox2
@@ -345,7 +357,7 @@
             label2.Font = new Font("Comic Sans MS", 18F, FontStyle.Regular, GraphicsUnit.Point);
             label2.Location = new Point(5, 5);
             label2.Name = "label2";
-            label2.Size = new Size(414, 42);
+            label2.Size = new Size(605, 42);
             label2.TabIndex = 1;
             label2.Text = "RESULT";
             label2.TextAlign = ContentAlignment.MiddleCenter;
@@ -363,18 +375,33 @@
             deleteToolStripMenuItem.Size = new Size(107, 22);
             deleteToolStripMenuItem.Text = "Delete";
             // 
-            // uploadModuleToolStripMenuItem
+            // uploadMasterImageToolStripMenuItem
             // 
-            uploadModuleToolStripMenuItem.Name = "uploadModuleToolStripMenuItem";
-            uploadModuleToolStripMenuItem.Size = new Size(180, 22);
-            uploadModuleToolStripMenuItem.Text = "Upload module";
-            uploadModuleToolStripMenuItem.Click += uploadModuleToolStripMenuItem_Click;
+            uploadMasterImageToolStripMenuItem.Name = "uploadMasterImageToolStripMenuItem";
+            uploadMasterImageToolStripMenuItem.Size = new Size(187, 22);
+            uploadMasterImageToolStripMenuItem.Text = "Upload Master Image";
+            // 
+            // listModuleToolStripMenuItem
+            // 
+            listModuleToolStripMenuItem.Name = "listModuleToolStripMenuItem";
+            listModuleToolStripMenuItem.Size = new Size(180, 22);
+            listModuleToolStripMenuItem.Text = "List module";
+            listModuleToolStripMenuItem.Click += listModuleToolStripMenuItem_Click;
+            // 
+            // richTextBox2
+            // 
+            richTextBox2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            richTextBox2.Location = new Point(3, 351);
+            richTextBox2.Name = "richTextBox2";
+            richTextBox2.Size = new Size(420, 146);
+            richTextBox2.TabIndex = 0;
+            richTextBox2.Text = "";
             // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1154, 602);
             Controls.Add(splitContainer1);
             Controls.Add(statusStrip1);
             Controls.Add(menuStrip1);
@@ -397,6 +424,7 @@
             splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
@@ -429,7 +457,6 @@
         private RichTextBox richTextBox1;
         private PictureBox pictureBox2;
         private Panel panel2;
-        private FlowLayoutPanel flowLayoutPanel1;
         private ContextMenuStrip contextMenuStripDeleteModule;
         private ToolStripMenuItem deleteToolStripMenuItem;
         private Label lbName;
@@ -437,5 +464,9 @@
         private ToolStripStatusLabel toolStripStatusError;
         private ToolStripStatusLabel toolStripStatusSerialData;
         private ToolStripMenuItem uploadModuleToolStripMenuItem;
+        private DataGridView dataGridView;
+        private ToolStripMenuItem uploadMasterImageToolStripMenuItem;
+        private ToolStripMenuItem listModuleToolStripMenuItem;
+        private RichTextBox richTextBox2;
     }
 }

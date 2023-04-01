@@ -134,10 +134,11 @@ namespace Object_Detection
 
             if (isObjDetect)
             {
-                if(labelOBJ == "NG")
+                if (labelOBJ == "NG")
                 {
                     serialCommand("ng");
-                }else if(labelOBJ == "OK")
+                }
+                else if (labelOBJ == "OK")
                 {
                     serialCommand("ok");
                 }
@@ -400,7 +401,14 @@ namespace Object_Detection
         private Forms.UploadModule uploadModule;
         private void uploadModuleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(uploadModule != null)
+
+            if (isConnect)
+            {
+                MessageBox.Show("Please disconnect serial port before open upload module");
+                return;
+            }
+
+            if (uploadModule != null)
             {
                 uploadModule.Close();
                 uploadModule.Dispose();
@@ -408,6 +416,25 @@ namespace Object_Detection
 
             uploadModule = new UploadModule();
             uploadModule.Show();
+        }
+
+        private Forms.ListModules listModules;
+        private void listModuleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (isConnect)
+            {
+                MessageBox.Show("Please disconnect serial port before open upload module");
+                return;
+            }
+
+            if (listModules != null)
+            {
+                listModules.Close();
+                listModules.Dispose();
+            }
+
+            listModules = new Forms.ListModules();
+            listModules.Show();
         }
     }
 }
