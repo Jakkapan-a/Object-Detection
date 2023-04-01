@@ -30,6 +30,9 @@
         {
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
+            toolStripStatusLabel2 = new ToolStripStatusLabel();
+            toolStripProgressBarUpload1 = new ToolStripProgressBar();
+            toolStripProgressBarUpload2 = new ToolStripProgressBar();
             btnSave = new Button();
             txtModule = new TextBox();
             btnModule = new Button();
@@ -39,10 +42,11 @@
             panel1 = new Panel();
             label5 = new Label();
             panel2 = new Panel();
+            cbActive = new CheckBox();
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
-            pictureBox = new PictureBox();
+            pictureBoxTemp = new PictureBox();
             pictureBox1 = new PictureBox();
             label4 = new Label();
             btnClear = new Button();
@@ -51,14 +55,14 @@
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxTemp).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // statusStrip1
             // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1 });
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabel2, toolStripProgressBarUpload1, toolStripProgressBarUpload2 });
             statusStrip1.Location = new Point(0, 489);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(841, 22);
@@ -70,6 +74,24 @@
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             toolStripStatusLabel1.Size = new Size(118, 17);
             toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
+            // toolStripStatusLabel2
+            // 
+            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            toolStripStatusLabel2.Size = new Size(118, 17);
+            toolStripStatusLabel2.Text = "toolStripStatusLabel2";
+            // 
+            // toolStripProgressBarUpload1
+            // 
+            toolStripProgressBarUpload1.Name = "toolStripProgressBarUpload1";
+            toolStripProgressBarUpload1.Size = new Size(100, 16);
+            toolStripProgressBarUpload1.Visible = false;
+            // 
+            // toolStripProgressBarUpload2
+            // 
+            toolStripProgressBarUpload2.Name = "toolStripProgressBarUpload2";
+            toolStripProgressBarUpload2.Size = new Size(100, 16);
+            toolStripProgressBarUpload2.Visible = false;
             // 
             // btnSave
             // 
@@ -99,6 +121,7 @@
             btnModule.TabIndex = 1;
             btnModule.Text = "...";
             btnModule.UseVisualStyleBackColor = true;
+            btnModule.Click += btnModule_Click;
             // 
             // btnImage
             // 
@@ -109,6 +132,7 @@
             btnImage.TabIndex = 1;
             btnImage.Text = "...";
             btnImage.UseVisualStyleBackColor = true;
+            btnImage.Click += btnImage_Click;
             // 
             // txtImage
             // 
@@ -151,10 +175,11 @@
             // 
             panel2.BackColor = SystemColors.ControlLight;
             panel2.BorderStyle = BorderStyle.FixedSingle;
+            panel2.Controls.Add(cbActive);
             panel2.Controls.Add(label3);
             panel2.Controls.Add(label2);
             panel2.Controls.Add(label1);
-            panel2.Controls.Add(pictureBox);
+            panel2.Controls.Add(pictureBoxTemp);
             panel2.Controls.Add(pictureBox1);
             panel2.Controls.Add(txtName);
             panel2.Controls.Add(label4);
@@ -169,6 +194,19 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(293, 409);
             panel2.TabIndex = 4;
+            // 
+            // cbActive
+            // 
+            cbActive.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cbActive.AutoSize = true;
+            cbActive.Checked = true;
+            cbActive.CheckState = CheckState.Checked;
+            cbActive.Location = new Point(185, 339);
+            cbActive.Name = "cbActive";
+            cbActive.Size = new Size(59, 19);
+            cbActive.TabIndex = 5;
+            cbActive.Text = "Active";
+            cbActive.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
@@ -197,16 +235,16 @@
             label1.TabIndex = 4;
             label1.Text = "Name";
             // 
-            // pictureBox
+            // pictureBoxTemp
             // 
-            pictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            pictureBox.BackColor = SystemColors.Control;
-            pictureBox.Location = new Point(75, 260);
-            pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(169, 107);
-            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox.TabIndex = 3;
-            pictureBox.TabStop = false;
+            pictureBoxTemp.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pictureBoxTemp.BackColor = SystemColors.Control;
+            pictureBoxTemp.Location = new Point(75, 242);
+            pictureBoxTemp.Name = "pictureBoxTemp";
+            pictureBoxTemp.Size = new Size(169, 91);
+            pictureBoxTemp.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBoxTemp.TabIndex = 3;
+            pictureBoxTemp.TabStop = false;
             // 
             // pictureBox1
             // 
@@ -239,19 +277,20 @@
             btnClear.TabIndex = 2;
             btnClear.Text = "Clear";
             btnClear.UseVisualStyleBackColor = true;
+            btnClear.Click += btnClear_Click;
             // 
             // dataGridView1
             // 
+            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Location = new Point(9, 107);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(533, 379);
+            dataGridView1.Size = new Size(533, 377);
             dataGridView1.TabIndex = 5;
             // 
             // label6
             // 
-            label6.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             label6.Font = new Font("Segoe UI", 9F, FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point);
             label6.Location = new Point(9, 83);
             label6.Name = "label6";
@@ -277,7 +316,7 @@
             panel1.ResumeLayout(false);
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxTemp).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
@@ -297,7 +336,7 @@
         private Panel panel1;
         private Panel panel2;
         private PictureBox pictureBox1;
-        private PictureBox pictureBox;
+        private PictureBox pictureBoxTemp;
         private DataGridView dataGridView1;
         private Label label4;
         private Label label3;
@@ -306,5 +345,9 @@
         private Label label5;
         private Label label6;
         private Button btnClear;
+        private ToolStripStatusLabel toolStripStatusLabel2;
+        private ToolStripProgressBar toolStripProgressBarUpload1;
+        private CheckBox cbActive;
+        private ToolStripProgressBar toolStripProgressBarUpload2;
     }
 }

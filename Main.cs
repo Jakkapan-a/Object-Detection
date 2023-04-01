@@ -281,11 +281,11 @@ namespace Object_Detection
             {
                 string filename = Guid.NewGuid().ToString() + ".jpg";
 
-                if (!Directory.Exists(Properties.Resources.path_image))
-                    Directory.CreateDirectory(Properties.Resources.path_image);
+                if (!Directory.Exists(Properties.Resources.path_images))
+                    Directory.CreateDirectory(Properties.Resources.path_images);
 
                 toolStripStatusLabel.Text = filename;
-                filename = Path.Combine(Properties.Resources.path_image, filename);
+                filename = Path.Combine(Properties.Resources.path_images, filename);
                 pictureBox1.Image?.Save(filename, ImageFormat.Jpeg);
             }
             catch (Exception ex)

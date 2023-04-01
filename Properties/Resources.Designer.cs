@@ -103,9 +103,18 @@ namespace Object_Detection.Properties {
         /// <summary>
         ///   Looks up a localized string similar to ./system/images.
         /// </summary>
-        internal static string path_image {
+        internal static string path_images {
             get {
-                return ResourceManager.GetString("path_image", resourceCulture);
+                return ResourceManager.GetString("path_images", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ./system/temp.
+        /// </summary>
+        internal static string path_temp {
+            get {
+                return ResourceManager.GetString("path_temp", resourceCulture);
             }
         }
         

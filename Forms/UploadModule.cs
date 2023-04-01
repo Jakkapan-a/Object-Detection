@@ -60,7 +60,7 @@ namespace Object_Detection.Forms
                 progressBar1.Value = 0;
                 progressBar1.Visible = true;
 
-                var args = new CopyFileArguments { SourcePath = filename, DestinationPath = newPath };
+                var args = new  CopyFileArguments{ SourcePath = filename, DestinationPath = newPath };
                 bgWorker.RunWorkerAsync(args);
             }
             else
