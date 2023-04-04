@@ -127,7 +127,7 @@ namespace Object_Detection
             UpdateFrameRate();
 
             DrawBoxes(pictureBox1.Image, predictions);
-            if (!bgObjDetection.IsBusy && bitmap != null)
+            if (!bgObjDetection.IsBusy && bitmap != null && yolo != null)
             {
                 imgPrediction?.Dispose();
                 imgPrediction = (Image)bitmap.Clone();
@@ -210,29 +210,29 @@ namespace Object_Detection
                 });
                 await openTask;
 
-                //if (cbSerial.Checked)
-                //{
-                //    // Connect to serial port
-                //    if (this.serialPort != null && this.serialPort.IsOpen)
-                //    {
-                //        this.serialPort.Close();
-                //    }
+                if (cbSerial.Checked)
+                {
+                     // Connect to serial port
+                    if (this.serialPort != null && this.serialPort.IsOpen)
+                    {
+                        this.serialPort.Close();
+                    }
 
-                //    serialPort.BaudRate = int.Parse(cbBaud.Text);
-                //    serialPort.PortName = cbCOM.Text;
-                //    serialPort.Open();
-                //}
-                //modules = SQliteDataAccess.Module.Get();
+                    serialPort.BaudRate = int.Parse(cbBaud.Text);
+                    serialPort.PortName = cbCOM.Text;
+                    serialPort.Open();
+                }
+                modules = SQliteDataAccess.Module.Get();
 
-                //if (File.Exists(Path.Combine(Properties.Resources.path_weight, modules[0].path)))
-                //{
-                //    yolo = YoloV5Predictor.Create(Path.Combine(Properties.Resources.path_weight, modules[0].filename), new string[] { "OK", "NG" });
-                //    Debug.WriteLine("NG");
-                //}
-                //else
-                //{
-                //    Debug.WriteLine("OK");
-                //}
+                if (File.Exists(Path.Combine(Properties.Resources.path_weight, modules[0].path)))
+                {
+                    yolo = YoloV5Predictor.Create(Path.Combine(Properties.Resources.path_weight, modules[0].path), new string[] { "OK", "NG" });
+                    Debug.WriteLine("OK");
+                }
+                else
+                {
+                    Debug.WriteLine("OK");
+                }
                 btnConnect.Text = "Disconnect";
                 lbName.Text = "Processing..";
                 lbName.BackColor = Color.Yellow;
