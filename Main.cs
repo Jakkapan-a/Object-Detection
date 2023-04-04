@@ -27,6 +27,7 @@ namespace Object_Detection
         private IPredictor yolo;
         private Prediction[]? predictions;
         private Image imgPrediction;
+        private Image imgDetection;
 
         private readonly string[] baudList = { "9600", "19200", "38400", "57600", "115200" };
 
@@ -173,19 +174,24 @@ namespace Object_Detection
             }
             pictureBox1.Image?.Dispose();
             pictureBox1.Image = (Image)bitmap.Clone();
+
+            imgDetection?.Dispose();
+            imgDetection = (Image)bitmap.Clone(); ;
             UpdateFrameRate();
 
-            DrawBoxes(pictureBox1.Image, predictions);
-            if (!bgObjDetection.IsBusy && bitmap != null && yolo != null)
-            {
-                imgPrediction?.Dispose();
-                imgPrediction = (Image)bitmap.Clone();
-                bgObjDetection.RunWorkerAsync();
-            }
+
 
             if (isObjDetect)
             {
-                string filename = SaveImagePredic(imgPrediction, predictions);
+                DrawBoxes(pictureBox1.Image, predictions);
+                if (!bgObjDetection.IsBusy && bitmap != null && yolo != null)
+                {
+                    imgPrediction?.Dispose();
+                    imgPrediction = (Image)bitmap.Clone();
+                    bgObjDetection.RunWorkerAsync();
+                }
+
+                string filename = SaveImagePredic(imgDetection, predictions);
                 string filename_master = Guid.NewGuid().ToString() + ".jpg";
                 filename_master.Replace("-", "_");
                 filename_master = "M_" + filename_master;
@@ -193,9 +199,7 @@ namespace Object_Detection
                 {
                     bmp.Save(Path.Combine(Properties.Resources.path_history, filename_master), ImageFormat.Jpeg);
                 }
-
                 pictureBoxDetect.Image?.Dispose();
-
                 pictureBoxDetect.Image = Image.FromFile(Path.Combine(Properties.Resources.path_history, filename));
 
                 history.image_path_master = filename_master;
@@ -221,6 +225,8 @@ namespace Object_Detection
 
                 isObjDetect = false;
             }
+
+            bitmap?.Dispose();
         }
 
         private Stopwatch stopwatchFrame = new Stopwatch();
@@ -272,7 +278,7 @@ namespace Object_Detection
                     }
                     btnConnect.Text = "Connecting";
                     pictureBox1.Image = null;
-                    pictureBox1.Image = Properties.Resources.Spinner_0_4s_800px;
+                    pictureBox1.Image = (Image)Properties.Resources.Spinner_0_4s_800px.Clone();
                     camIndex = cbDrive.SelectedIndex;
                     openTask = Task.Run(() =>
                     {
@@ -309,7 +315,7 @@ namespace Object_Detection
                     lbName.BackColor = Color.Yellow;
 
                     pictureBoxDetect.Image?.Dispose();
-                    pictureBoxDetect.Image = Properties.Resources.Spinner_0_4s_800px;
+                    pictureBoxDetect.Image = (Image)Properties.Resources.Spinner_0_4s_800px.Clone();
                 }
                 else
                 {
@@ -411,7 +417,7 @@ namespace Object_Detection
                     lbName.Text = "Processing..";
                     lbName.BackColor = Color.Yellow;
                     pictureBoxDetect.Image?.Dispose();
-                    pictureBoxDetect.Image = Properties.Resources.Spinner_0_4s_800px;
+                    pictureBoxDetect.Image = (Image)Properties.Resources.Spinner_0_4s_800px.Clone();
                 }
 
             }
