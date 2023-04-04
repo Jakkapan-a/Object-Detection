@@ -29,7 +29,7 @@
       <HintPath>..\..\..\..\CPush\Class Library\TClass\TClass\bin\Debug\TClass.dll</HintPath>
     </Reference>
     <Reference Include="Yolo.Net">
-      <HintPath>..\..\D92A\Code\Yolo.Net\bin\Debug\net7.0\Yolo.Net.dll</HintPath>
+      <HintPath>..\..\D92A\Yolo\Trial01\Yolov8.Net-1.0.3\Yolov8.Net-1.0.3\src\Yolov8net\bin\Debug\net6.0\Yolo.Net.dll</HintPath>
     </Reference>
   </ItemGroup>
 

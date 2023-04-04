@@ -10,11 +10,13 @@ using System.Windows.Forms;
 using TClass;
 using System.IO.Ports;
 using System.Drawing.Drawing2D;
-using Yolo.Net;
+
 using System.Data;
 using Object_Detection.SQliteDataAccess;
 using System.Runtime.Intrinsics.X86;
 using OpenCvSharp.Aruco;
+using System.Drawing;
+using Yolonet;
 
 namespace Object_Detection
 {
@@ -32,6 +34,7 @@ namespace Object_Detection
         private readonly string[] baudList = { "9600", "19200", "38400", "57600", "115200" };
 
         private bool isObjDetect = false;
+        private bool isObjDetectReset = false;
         private Stopwatch stopwatch;
 
         private string labelOBJ = string.Empty;
@@ -112,10 +115,22 @@ namespace Object_Detection
 
         private void BgObjDetection_DoWork(object? sender, DoWorkEventArgs e)
         {
-            stopwatch.Restart();
-            predictions = yolo.Predict(imgPrediction);
-            stopwatch.Stop();
-            Debug.WriteLine("Time {0}ms", stopwatch.ElapsedMilliseconds);
+            try
+            {
+                stopwatch.Restart();
+                //if (imgDetection != null)
+                //{
+                //    imgPrediction?.Dispose();
+                //    imgPrediction = (Image)imgDetection.Clone();
+                //}
+                predictions = yolo.Predict((Image)imgDetection.Clone());
+                Thread.Sleep(500);
+                stopwatch.Stop();
+                Debug.WriteLine("Time {0}ms", stopwatch.ElapsedMilliseconds);
+            }catch(Exception ex)
+            {
+                Debug.WriteLine("E01 "+ex.Message);
+            }
         }
 
         private string readDataSerial = string.Empty;
@@ -172,29 +187,33 @@ namespace Object_Detection
                 Invoke(new Action(() => MyCapture_OnFrameHeader(bitmap)));
                 return;
             }
-            pictureBox1.Image?.Dispose();
-            pictureBox1.Image = (Image)bitmap.Clone();
 
             imgDetection?.Dispose();
-            imgDetection = (Image)bitmap.Clone(); ;
+            imgDetection = (Image)bitmap.Clone();
+
+            Image oldImage = pictureBox1.Image;
+            pictureBox1.Image = (Image)bitmap.Clone();
+            oldImage?.Dispose();
+
             UpdateFrameRate();
 
+            UpdateFrameRate();
 
+            DrawBoxes(pictureBox1.Image, predictions);
+            if (!bgObjDetection.IsBusy && bitmap != null && yolo != null)
+            {
+                bgObjDetection.RunWorkerAsync();
+            }
 
             if (isObjDetect)
             {
-                DrawBoxes(pictureBox1.Image, predictions);
-                if (!bgObjDetection.IsBusy && bitmap != null && yolo != null)
-                {
-                    imgPrediction?.Dispose();
-                    imgPrediction = (Image)bitmap.Clone();
-                    bgObjDetection.RunWorkerAsync();
-                }
-
                 string filename = SaveImagePredic(imgDetection, predictions);
                 string filename_master = Guid.NewGuid().ToString() + ".jpg";
                 filename_master.Replace("-", "_");
                 filename_master = "M_" + filename_master;
+
+                if (filename == string.Empty)
+                    return;
                 using (Image bmp = Image.FromFile(Path.Combine(Properties.Resources.path_images, modules[0].image)))
                 {
                     bmp.Save(Path.Combine(Properties.Resources.path_history, filename_master), ImageFormat.Jpeg);
@@ -222,11 +241,8 @@ namespace Object_Detection
                 {
                     history.Save();
                 }
-
                 isObjDetect = false;
             }
-
-            bitmap?.Dispose();
         }
 
         private Stopwatch stopwatchFrame = new Stopwatch();
@@ -278,7 +294,7 @@ namespace Object_Detection
                     }
                     btnConnect.Text = "Connecting";
                     pictureBox1.Image = null;
-                    pictureBox1.Image = (Image)Properties.Resources.Spinner_0_4s_800px.Clone();
+                    pictureBox1.Image = Properties.Resources.Spinner_0_4s_800px;
                     camIndex = cbDrive.SelectedIndex;
                     openTask = Task.Run(() =>
                     {
@@ -304,18 +320,17 @@ namespace Object_Detection
                     if (File.Exists(Path.Combine(Properties.Resources.path_weight, modules[0].path)))
                     {
                         yolo = YoloV5Predictor.Create(Path.Combine(Properties.Resources.path_weight, modules[0].path), new string[] { "OK", "NG" });
-                        Debug.WriteLine("OK");
                     }
                     else
                     {
-                        Debug.WriteLine("OK");
+                        Debug.WriteLine("NG");
                     }
                     btnConnect.Text = "Disconnect";
                     lbName.Text = "Processing..";
                     lbName.BackColor = Color.Yellow;
 
                     pictureBoxDetect.Image?.Dispose();
-                    pictureBoxDetect.Image = (Image)Properties.Resources.Spinner_0_4s_800px.Clone();
+                    pictureBoxDetect.Image = Properties.Resources.Spinner_0_4s_800px;
                 }
                 else
                 {
@@ -417,7 +432,7 @@ namespace Object_Detection
                     lbName.Text = "Processing..";
                     lbName.BackColor = Color.Yellow;
                     pictureBoxDetect.Image?.Dispose();
-                    pictureBoxDetect.Image = (Image)Properties.Resources.Spinner_0_4s_800px.Clone();
+                    pictureBoxDetect.Image = Properties.Resources.Spinner_0_4s_800px;
                 }
 
             }
