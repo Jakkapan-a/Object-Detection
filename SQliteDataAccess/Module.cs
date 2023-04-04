@@ -12,7 +12,7 @@ namespace Object_Detection.SQliteDataAccess
         public string name { get; set; }
         public string description { get; set; }
         public string filename { get; set; }
-        public string path { get; set; }
+        public string path { get; set; } // ONNX
         public string image { get; set; }
         public int status { get; set; } = 1;
         public string created_at { get; set; }

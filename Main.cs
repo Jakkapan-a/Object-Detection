@@ -13,6 +13,8 @@ using System.Drawing.Drawing2D;
 using Yolo.Net;
 using System.Data;
 using Object_Detection.SQliteDataAccess;
+using System.Runtime.Intrinsics.X86;
+using OpenCvSharp.Aruco;
 
 namespace Object_Detection
 {
@@ -33,6 +35,8 @@ namespace Object_Detection
 
         private string labelOBJ = string.Empty;
         private List<SQliteDataAccess.Module> modules;
+
+        private History history;
         public Main()
         {
             InitializeComponent();
@@ -54,7 +58,51 @@ namespace Object_Detection
 
             stopwatch = new Stopwatch();
 
+            history = new History();
+
         }
+        private Task taskDeleteOldFile;
+
+        private void DeleteOldFile()
+        {
+            taskDeleteOldFile = Task.Run(() =>
+            {
+                // Get files
+                var files = Directory.GetFiles(Properties.Resources.path_history, "*.jpg", SearchOption.AllDirectories);
+                // Delete files old 30 days
+                foreach (var file in files)
+                {
+                    if (File.GetCreationTime(file) < DateTime.Now.AddDays(-30))
+                    {
+                        File.Delete(file);
+                    }
+                }
+                // Get modules
+                var modules = SQliteDataAccess.Module.Get();
+                // Get files
+                var files2 = Directory.GetFiles(Properties.Resources.path_images, "*.jpg", SearchOption.AllDirectories);
+                // Delete files if not exist in modules
+                foreach (var file in files2)
+                {
+                    if (!modules.Any(x => x.image == Path.GetFileName(file)))
+                    {
+                        File.Delete(file);
+                    }
+                }
+
+                // Get files onnx
+                var files3 = Directory.GetFiles(Properties.Resources.path_weight, "*.onnx", SearchOption.AllDirectories);
+                // Delete files if not exist in modules
+                foreach (var file in files3)
+                {
+                    if (!modules.Any(x => x.path == Path.GetFileName(file)))
+                    {
+                        File.Delete(file);
+                    }
+                }
+            });
+        }
+
 
         private void BgObjDetection_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
         {
@@ -75,6 +123,7 @@ namespace Object_Detection
         private void Main_Load(object sender, EventArgs e)
         {
             loading();
+            DeleteOldFile();
         }
 
         public void loading()
@@ -136,10 +185,26 @@ namespace Object_Detection
 
             if (isObjDetect)
             {
+                string filename = SaveImagePredic(imgPrediction, predictions);
+                string filename_master = Guid.NewGuid().ToString() + ".jpg";
+                filename_master.Replace("-", "_");
+                filename_master = "M_" + filename_master;
+                using (Image bmp = Image.FromFile(Path.Combine(Properties.Resources.path_images, modules[0].image)))
+                {
+                    bmp.Save(Path.Combine(Properties.Resources.path_history, filename_master), ImageFormat.Jpeg);
+                }
+
+                pictureBoxDetect.Image?.Dispose();
+
+                pictureBoxDetect.Image = Image.FromFile(Path.Combine(Properties.Resources.path_history, filename));
+
+                history.image_path_master = filename_master;
+                history.image_path_result = filename;
+                history.result = labelOBJ;
                 if (labelOBJ == "NG")
                 {
                     serialCommand("ng");
-                    lbName.Text = "OK";
+                    lbName.Text = "NG";
                     lbName.BackColor = Color.Red;
                 }
                 else if (labelOBJ == "OK")
@@ -148,6 +213,12 @@ namespace Object_Detection
                     lbName.Text = "OK";
                     lbName.BackColor = Color.Green;
                 }
+
+                if (history.image_path_result != string.Empty)
+                {
+                    history.Save();
+                }
+
                 isObjDetect = false;
             }
         }
@@ -185,87 +256,94 @@ namespace Object_Detection
 
         private async void btnConnect_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            if (openTask != null && openTask.Status == TaskStatus.Running)
+            try
             {
-                Debug.WriteLine("Task is running");
-                return;
-            }
-            isConnect = !isConnect;
-            if (isConnect)
-            {
-                if (cbDrive.SelectedIndex == -1)
+                if (openTask != null && openTask.Status == TaskStatus.Running)
                 {
-                    throw new Exception("Invalid drive camera");
+                    Debug.WriteLine("Task is running");
+                    return;
                 }
-                btnConnect.Text = "Connecting";
-                pictureBox1.Image = null;
-                pictureBox1.Image = Properties.Resources.Spinner_0_4s_800px;
-                camIndex = cbDrive.SelectedIndex;
-                openTask = Task.Run(() =>
+                isConnect = !isConnect;
+                if (isConnect)
                 {
-                    myCapture.Start(camIndex);
-                    //cameraControl.set(camIndex);
-                });
-                await openTask;
+                    if (cbDrive.SelectedIndex == -1)
+                    {
+                        throw new Exception("Invalid drive camera");
+                    }
+                    btnConnect.Text = "Connecting";
+                    pictureBox1.Image = null;
+                    pictureBox1.Image = Properties.Resources.Spinner_0_4s_800px;
+                    camIndex = cbDrive.SelectedIndex;
+                    openTask = Task.Run(() =>
+                    {
+                        myCapture.Start(camIndex);
+                    });
+                    await openTask;
+                    cameraControl.set(camIndex);
 
-                if (cbSerial.Checked)
+                    if (cbSerial.Checked)
+                    {
+                        // Connect to serial port
+                        if (this.serialPort != null && this.serialPort.IsOpen)
+                        {
+                            this.serialPort.Close();
+                        }
+
+                        serialPort.BaudRate = int.Parse(cbBaud.Text);
+                        serialPort.PortName = cbCOM.Text;
+                        serialPort.Open();
+                    }
+                    modules = SQliteDataAccess.Module.Get();
+
+                    if (File.Exists(Path.Combine(Properties.Resources.path_weight, modules[0].path)))
+                    {
+                        yolo = YoloV5Predictor.Create(Path.Combine(Properties.Resources.path_weight, modules[0].path), new string[] { "OK", "NG" });
+                        Debug.WriteLine("OK");
+                    }
+                    else
+                    {
+                        Debug.WriteLine("OK");
+                    }
+                    btnConnect.Text = "Disconnect";
+                    lbName.Text = "Processing..";
+                    lbName.BackColor = Color.Yellow;
+
+                    pictureBoxDetect.Image?.Dispose();
+                    pictureBoxDetect.Image = Properties.Resources.Spinner_0_4s_800px;
+                }
+                else
                 {
-                     // Connect to serial port
+                    myCapture.Stop();
+                    btnConnect.Text = "Connect";
+                    pictureBox1.Image?.Dispose();
+                    pictureBox1.Image = null;
                     if (this.serialPort != null && this.serialPort.IsOpen)
                     {
                         this.serialPort.Close();
                     }
 
-                    serialPort.BaudRate = int.Parse(cbBaud.Text);
-                    serialPort.PortName = cbCOM.Text;
-                    serialPort.Open();
+                    lbName.Text = "---------------";
+                    lbName.BackColor = Color.Yellow;
+                    pictureBoxDetect.Image?.Dispose();
+                    pictureBoxDetect.Image = null;
                 }
-                modules = SQliteDataAccess.Module.Get();
 
-                if (File.Exists(Path.Combine(Properties.Resources.path_weight, modules[0].path)))
+                if (serialPort.IsOpen)
                 {
-                    yolo = YoloV5Predictor.Create(Path.Combine(Properties.Resources.path_weight, modules[0].path), new string[] { "OK", "NG" });
-                    Debug.WriteLine("OK");
+                    toolStripStatusSerial.Text = $"Serial: {serialPort.PortName} - {serialPort.BaudRate}";
+                    toolStripStatusSerial.ForeColor = Color.Green;
                 }
                 else
                 {
-                    Debug.WriteLine("OK");
-                }
-                btnConnect.Text = "Disconnect";
-                lbName.Text = "Processing..";
-                lbName.BackColor = Color.Yellow;
-            }
-            else
-            {
-                myCapture.Stop();
-                btnConnect.Text = "Connect";
-                pictureBox1.Image?.Dispose();
-                pictureBox1.Image = null;
-
-                if (this.serialPort != null && this.serialPort.IsOpen)
-                {
-                    this.serialPort.Close();
+                    toolStripStatusSerial.Text = $"Serial: {serialPort.PortName} - {serialPort.BaudRate}";
+                    toolStripStatusSerial.ForeColor = Color.Red;
                 }
             }
-
-            if (serialPort.IsOpen)
+            catch (Exception ex)
             {
-                toolStripStatusSerial.Text = $"Serial: {serialPort.PortName} - {serialPort.BaudRate}";
-                toolStripStatusSerial.ForeColor = Color.Green;
+                toolStripStatusError.Text = ex.Message;
+                toolStripStatusError.ForeColor = Color.Red;
             }
-            else
-            {
-                toolStripStatusSerial.Text = $"Serial: {serialPort.PortName} - {serialPort.BaudRate}";
-                toolStripStatusSerial.ForeColor = Color.Red;
-            }
-            //}
-            //catch (Exception ex)
-            //{
-            //    toolStripStatusError.Text = ex.Message;
-            //    toolStripStatusError.ForeColor = Color.Red;
-            //}
         }
 
         private CameraControls camControls;
@@ -308,7 +386,7 @@ namespace Object_Detection
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             readDataSerial = serialPort.ReadLine();
-            this.Invoke(new EventHandler(dataReceived));
+            _ = this.Invoke(new EventHandler(dataReceived));
         }
 
         private void dataReceived(object sender, EventArgs e)
@@ -332,6 +410,8 @@ namespace Object_Detection
                     predictions = null;
                     lbName.Text = "Processing..";
                     lbName.BackColor = Color.Yellow;
+                    pictureBoxDetect.Image?.Dispose();
+                    pictureBoxDetect.Image = Properties.Resources.Spinner_0_4s_800px;
                 }
 
             }
@@ -353,6 +433,47 @@ namespace Object_Detection
         private void flowLayoutPanel1_Resize(object sender, EventArgs e)
         {
 
+        }
+
+        private string SaveImagePredic(Image image, Prediction[] predictions)
+        {
+            string filename = Guid.NewGuid().ToString() + ".jpg";
+
+            if (image == null || predictions == null || predictions.Length != 1) return string.Empty;
+
+            var originalImageHeight = image.Height;
+            var originalImageWidth = image.Width;
+            foreach (var pred in predictions)
+            {
+                var x = Math.Max(pred.Rectangle.X, 0);
+                var y = Math.Max(pred.Rectangle.Y, 0);
+                var width = Math.Min(originalImageWidth - x, pred.Rectangle.Width);
+                var height = Math.Min(originalImageHeight - y, pred.Rectangle.Height);
+
+                string text = $"{pred.Label.Name} [{pred.Score}]";
+                using (Bitmap img = new Bitmap((int)width, (int)height))
+                {
+                    Rectangle rect = new Rectangle((int)x, (int)y, (int)width, (int)height);
+                    using (Graphics g = Graphics.FromImage(img))
+                    {
+                        g.DrawImage(image, 0, 0, rect, GraphicsUnit.Pixel);
+                    }
+                    if (!Directory.Exists(Properties.Resources.path_history))
+                    {
+                        Directory.CreateDirectory(Properties.Resources.path_history);
+                    }
+                    filename.Replace("-", "_");
+                    filename = text + "_" + filename;
+                    string path = Path.Combine(Properties.Resources.path_history, filename);
+                    img.Save(path, ImageFormat.Jpeg);
+
+                    string filename2 = text + "_2_" + filename;
+                    path = Path.Combine(Properties.Resources.path_history, filename2);
+                    image.Save(path, ImageFormat.Jpeg);
+                    filename2.Replace("_2_", "");
+                };
+            }
+            return filename;
         }
 
         private void DrawBoxes(Image image, Prediction[] predictions)
@@ -445,80 +566,5 @@ namespace Object_Detection
             listModules.Show();
         }
 
-        private void RenderData()
-        {
-            DataTable dt = CreateDataTable();
-
-            PopulateDataTable(dt);
-
-            SetupDataGridView(dt);
-
-            LoadImagesToDataGridView();
-        }
-
-        private DataTable CreateDataTable()
-        {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("No", typeof(int));
-            dt.Columns.Add("id", typeof(int));
-            dt.Columns.Add("Name", typeof(string));
-            dt.Columns.Add("ImagePath", typeof(string));
-            dt.Columns.Add("Date", typeof(string));
-            return dt;
-        }
-
-        private void PopulateDataTable(DataTable dt)
-        {
-            //var modules = Module.Get();
-            //int rowNumber = 0;
-            //foreach (var item in modules)
-            //{
-            //    dt.Rows.Add(++rowNumber, item.id, item.name, item.path, item.image, item.updated_at);
-            //}
-        }
-
-
-        private void SetupDataGridView(DataTable dt)
-        {
-            // Clear the dataGridView1 before updating
-            dataGridView1.DataSource = null;
-            dataGridView1.Columns.Clear();
-            dataGridView1.Rows.Clear();
-            dataGridView1.ClearSelection();
-            dataGridView1.DataSource = dt;
-
-            DataGridViewImageColumn imageColumn = new DataGridViewImageColumn();
-            imageColumn.Name = "Image";
-            imageColumn.HeaderText = "Image";
-            imageColumn.ImageLayout = DataGridViewImageCellLayout.Zoom;
-            imageColumn.Width = 100;
-            dataGridView1.Columns.Insert(4, imageColumn);
-            dataGridView1.RowTemplate.Height = 100;
-            dataGridView1.Columns["ImagePath"].Visible = false;
-            dataGridView1.Columns["id"].Visible = false;
-
-            DataGridViewImageColumn imageColumn2 = new DataGridViewImageColumn();
-            imageColumn2.Name = "Detect";
-            imageColumn2.HeaderText = "Detect";
-            imageColumn2.ImageLayout = DataGridViewImageCellLayout.Zoom;
-            imageColumn2.Width = 100;
-            dataGridView1.Columns.Insert(4, imageColumn2);
-            dataGridView1.RowTemplate.Height = 100;
-            dataGridView1.Columns["DetectPage"].Visible = false;
-            dataGridView1.Columns["id"].Visible = false;
-
-            dataGridView1.Columns["No"].Width = (int)(dataGridView1.Width * 0.1);
-            dataGridView1.Columns["Date"].Width = (int)(dataGridView1.Width * 0.15);
-            dataGridView1.ClearSelection();
-        }
-
-        private void LoadImagesToDataGridView()
-        {
-            for (int i = 0; i < dataGridView1.Rows.Count; i++)
-            {
-                dataGridView1.Rows[i].Cells["Image"].Value = Image.FromFile(Path.Combine(Properties.Resources.path_images, dataGridView1.Rows[i].Cells["ImagePath"].Value.ToString()));
-                dataGridView1.Rows[i].Height = 100;
-            }
-        }
     }
 }

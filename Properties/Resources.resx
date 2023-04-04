@@ -145,4 +145,7 @@
   <data name="path_temp" xml:space="preserve">
     <value>./system/temp</value>
   </data>
+  <data name="path_history" xml:space="preserve">
+    <value>./system/history</value>
+  </data>
 </root>

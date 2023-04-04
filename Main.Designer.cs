@@ -49,8 +49,8 @@
             richTextBox1 = new RichTextBox();
             label1 = new Label();
             panel2 = new Panel();
+            pictureBoxDetect = new PictureBox();
             richTextBox2 = new RichTextBox();
-            dataGridView1 = new DataGridView();
             lbName = new Label();
             panel1 = new Panel();
             pictureBox2 = new PictureBox();
@@ -74,7 +74,7 @@
             splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxDetect).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             contextMenuStripDeleteModule.SuspendLayout();
@@ -257,14 +257,24 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(pictureBoxDetect);
             panel2.Controls.Add(richTextBox2);
-            panel2.Controls.Add(dataGridView1);
             panel2.Controls.Add(lbName);
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(5, 47);
             panel2.Name = "panel2";
             panel2.Size = new Size(432, 500);
             panel2.TabIndex = 3;
+            // 
+            // pictureBoxDetect
+            // 
+            pictureBoxDetect.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pictureBoxDetect.Location = new Point(3, 52);
+            pictureBoxDetect.Name = "pictureBoxDetect";
+            pictureBoxDetect.Size = new Size(420, 282);
+            pictureBoxDetect.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBoxDetect.TabIndex = 6;
+            pictureBoxDetect.TabStop = false;
             // 
             // richTextBox2
             // 
@@ -274,16 +284,6 @@
             richTextBox2.Size = new Size(420, 146);
             richTextBox2.TabIndex = 0;
             richTextBox2.Text = "";
-            // 
-            // dataGridView1
-            // 
-            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(0, 52);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(423, 282);
-            dataGridView1.TabIndex = 6;
             // 
             // lbName
             // 
@@ -425,7 +425,7 @@
             splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxDetect).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
@@ -465,9 +465,9 @@
         private ToolStripStatusLabel toolStripStatusError;
         private ToolStripStatusLabel toolStripStatusSerialData;
         private ToolStripMenuItem uploadModuleToolStripMenuItem;
-        private DataGridView dataGridView1;
         private ToolStripMenuItem uploadMasterImageToolStripMenuItem;
         private ToolStripMenuItem listModuleToolStripMenuItem;
         private RichTextBox richTextBox2;
+        private PictureBox pictureBoxDetect;
     }
 }
