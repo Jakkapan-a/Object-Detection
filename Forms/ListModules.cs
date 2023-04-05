@@ -325,8 +325,14 @@ namespace Object_Detection.Forms
         private bool loaded = false;
         private void ListModules_Load(object sender, EventArgs e)
         {
-            RenderData();
-            loaded = true;
+            try
+            {
+                loaded = true;
+                RenderData();
+            }catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
@@ -367,9 +373,16 @@ namespace Object_Detection.Forms
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var module = Module.Get(id).FirstOrDefault();
-            module.Delete();
-            RenderData();
+            try
+            {
+                var module = Module.Get(id).FirstOrDefault();
+                module.Delete();
+                RenderData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

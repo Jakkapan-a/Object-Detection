@@ -46,15 +46,24 @@
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
             pictureBox1 = new PictureBox();
-            richTextBox1 = new RichTextBox();
+            dataGridView1 = new DataGridView();
             label1 = new Label();
             panel2 = new Panel();
             pictureBoxDetect = new PictureBox();
             richTextBox2 = new RichTextBox();
             lbName = new Label();
             panel1 = new Panel();
+            label7 = new Label();
+            label6 = new Label();
+            label5 = new Label();
+            label4 = new Label();
+            label3 = new Label();
+            txtName = new TextBox();
+            txtModel = new TextBox();
+            pictureBox3 = new PictureBox();
             pictureBox2 = new PictureBox();
             cbSerial = new CheckBox();
+            btnLoading = new Button();
             btnConnect = new Button();
             cbCOM = new ComboBox();
             cbBaud = new ComboBox();
@@ -73,9 +82,11 @@
             splitContainer2.Panel2.SuspendLayout();
             splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxDetect).BeginInit();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             contextMenuStripDeleteModule.SuspendLayout();
             SuspendLayout();
@@ -201,7 +212,7 @@
             splitContainer1.Panel2.Controls.Add(label2);
             splitContainer1.Panel2.Padding = new Padding(5);
             splitContainer1.Size = new Size(1154, 554);
-            splitContainer1.SplitterDistance = 533;
+            splitContainer1.SplitterDistance = 672;
             splitContainer1.TabIndex = 2;
             // 
             // splitContainer2
@@ -218,9 +229,9 @@
             // 
             // splitContainer2.Panel2
             // 
-            splitContainer2.Panel2.Controls.Add(richTextBox1);
-            splitContainer2.Size = new Size(523, 502);
-            splitContainer2.SplitterDistance = 339;
+            splitContainer2.Panel2.Controls.Add(dataGridView1);
+            splitContainer2.Size = new Size(662, 502);
+            splitContainer2.SplitterDistance = 365;
             splitContainer2.TabIndex = 1;
             // 
             // pictureBox1
@@ -229,19 +240,21 @@
             pictureBox1.BackColor = SystemColors.ControlLight;
             pictureBox1.Location = new Point(6, 3);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(512, 331);
+            pictureBox1.Size = new Size(651, 357);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 1;
             pictureBox1.TabStop = false;
             // 
-            // richTextBox1
+            // dataGridView1
             // 
-            richTextBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            richTextBox1.Location = new Point(3, 8);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(515, 146);
-            richTextBox1.TabIndex = 0;
-            richTextBox1.Text = "";
+            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(6, 3);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowTemplate.Height = 25;
+            dataGridView1.Size = new Size(651, 125);
+            dataGridView1.TabIndex = 0;
             // 
             // label1
             // 
@@ -250,7 +263,7 @@
             label1.Font = new Font("Comic Sans MS", 18F, FontStyle.Regular, GraphicsUnit.Point);
             label1.Location = new Point(5, 5);
             label1.Name = "label1";
-            label1.Size = new Size(523, 42);
+            label1.Size = new Size(662, 42);
             label1.TabIndex = 0;
             label1.Text = "CAMERA";
             label1.TextAlign = ContentAlignment.MiddleCenter;
@@ -263,7 +276,7 @@
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(5, 47);
             panel2.Name = "panel2";
-            panel2.Size = new Size(432, 500);
+            panel2.Size = new Size(278, 500);
             panel2.TabIndex = 3;
             // 
             // pictureBoxDetect
@@ -271,7 +284,7 @@
             pictureBoxDetect.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pictureBoxDetect.Location = new Point(3, 52);
             pictureBoxDetect.Name = "pictureBoxDetect";
-            pictureBoxDetect.Size = new Size(420, 282);
+            pictureBoxDetect.Size = new Size(266, 282);
             pictureBoxDetect.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBoxDetect.TabIndex = 6;
             pictureBoxDetect.TabStop = false;
@@ -281,7 +294,7 @@
             richTextBox2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             richTextBox2.Location = new Point(3, 351);
             richTextBox2.Name = "richTextBox2";
-            richTextBox2.Size = new Size(420, 146);
+            richTextBox2.Size = new Size(266, 146);
             richTextBox2.TabIndex = 0;
             richTextBox2.Text = "";
             // 
@@ -292,7 +305,7 @@
             lbName.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
             lbName.Location = new Point(3, 3);
             lbName.Name = "lbName";
-            lbName.Size = new Size(423, 43);
+            lbName.Size = new Size(269, 43);
             lbName.TabIndex = 5;
             lbName.Text = "---";
             lbName.TextAlign = ContentAlignment.MiddleCenter;
@@ -300,23 +313,106 @@
             // panel1
             // 
             panel1.BackColor = SystemColors.ControlLight;
+            panel1.Controls.Add(label7);
+            panel1.Controls.Add(label6);
+            panel1.Controls.Add(label5);
+            panel1.Controls.Add(label4);
+            panel1.Controls.Add(label3);
+            panel1.Controls.Add(txtName);
+            panel1.Controls.Add(txtModel);
+            panel1.Controls.Add(pictureBox3);
             panel1.Controls.Add(pictureBox2);
             panel1.Controls.Add(cbSerial);
+            panel1.Controls.Add(btnLoading);
             panel1.Controls.Add(btnConnect);
             panel1.Controls.Add(cbCOM);
             panel1.Controls.Add(cbBaud);
             panel1.Controls.Add(cbDrive);
             panel1.Dock = DockStyle.Right;
-            panel1.Location = new Point(437, 47);
+            panel1.Location = new Point(283, 47);
             panel1.Name = "panel1";
-            panel1.Size = new Size(173, 500);
+            panel1.Size = new Size(188, 500);
             panel1.TabIndex = 2;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(11, 276);
+            label7.Name = "label7";
+            label7.Size = new Size(35, 15);
+            label7.TabIndex = 8;
+            label7.Text = "COM";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(11, 247);
+            label6.Name = "label6";
+            label6.Size = new Size(34, 15);
+            label6.TabIndex = 8;
+            label6.Text = "Baud";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(11, 216);
+            label5.Name = "label5";
+            label5.Size = new Size(40, 15);
+            label5.TabIndex = 8;
+            label5.Text = "Drive :";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(3, 106);
+            label4.Name = "label4";
+            label4.Size = new Size(45, 15);
+            label4.TabIndex = 8;
+            label4.Text = "Name :";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(3, 77);
+            label3.Name = "label3";
+            label3.Size = new Size(47, 15);
+            label3.TabIndex = 8;
+            label3.Text = "Model :";
+            // 
+            // txtName
+            // 
+            txtName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtName.Location = new Point(51, 103);
+            txtName.Name = "txtName";
+            txtName.Size = new Size(131, 23);
+            txtName.TabIndex = 1;
+            txtName.KeyDown += txtName_KeyDown;
+            // 
+            // txtModel
+            // 
+            txtModel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtModel.Location = new Point(51, 74);
+            txtModel.Name = "txtModel";
+            txtModel.Size = new Size(131, 23);
+            txtModel.TabIndex = 0;
+            txtModel.KeyDown += txtModel_KeyDown;
+            // 
+            // pictureBox3
+            // 
+            pictureBox3.BackgroundImage = Properties.Resources.customer;
+            pictureBox3.BackgroundImageLayout = ImageLayout.Zoom;
+            pictureBox3.Location = new Point(51, 16);
+            pictureBox3.Name = "pictureBox3";
+            pictureBox3.Size = new Size(90, 43);
+            pictureBox3.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox3.TabIndex = 5;
+            pictureBox3.TabStop = false;
             // 
             // pictureBox2
             // 
             pictureBox2.BackgroundImage = Properties.Resources.camera_logo;
             pictureBox2.BackgroundImageLayout = ImageLayout.Zoom;
-            pictureBox2.Location = new Point(51, 3);
+            pictureBox2.Location = new Point(51, 164);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(90, 43);
             pictureBox2.TabIndex = 5;
@@ -328,20 +424,32 @@
             cbSerial.AutoSize = true;
             cbSerial.Checked = true;
             cbSerial.CheckState = CheckState.Checked;
-            cbSerial.Location = new Point(67, 141);
+            cbSerial.Location = new Point(67, 302);
             cbSerial.Name = "cbSerial";
             cbSerial.Size = new Size(100, 19);
-            cbSerial.TabIndex = 4;
+            cbSerial.TabIndex = 5;
             cbSerial.Text = "Use serial port";
             cbSerial.UseVisualStyleBackColor = true;
+            // 
+            // btnLoading
+            // 
+            btnLoading.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            btnLoading.BackgroundImage = Properties.Resources._refresh_32;
+            btnLoading.BackgroundImageLayout = ImageLayout.Zoom;
+            btnLoading.Location = new Point(6, 327);
+            btnLoading.Name = "btnLoading";
+            btnLoading.Size = new Size(26, 23);
+            btnLoading.TabIndex = 3;
+            btnLoading.UseVisualStyleBackColor = true;
+            btnLoading.Click += loading;
             // 
             // btnConnect
             // 
             btnConnect.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            btnConnect.Location = new Point(11, 166);
+            btnConnect.Location = new Point(51, 327);
             btnConnect.Name = "btnConnect";
-            btnConnect.Size = new Size(156, 23);
-            btnConnect.TabIndex = 3;
+            btnConnect.Size = new Size(131, 23);
+            btnConnect.TabIndex = 6;
             btnConnect.Text = "Connect";
             btnConnect.UseVisualStyleBackColor = true;
             btnConnect.Click += btnConnect_Click;
@@ -350,28 +458,31 @@
             // 
             cbCOM.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             cbCOM.FormattingEnabled = true;
-            cbCOM.Location = new Point(11, 112);
+            cbCOM.Location = new Point(51, 273);
             cbCOM.Name = "cbCOM";
-            cbCOM.Size = new Size(156, 23);
-            cbCOM.TabIndex = 2;
+            cbCOM.Size = new Size(131, 23);
+            cbCOM.TabIndex = 4;
+            cbCOM.SelectedIndexChanged += cbCOM_SelectedIndexChanged;
             // 
             // cbBaud
             // 
             cbBaud.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             cbBaud.FormattingEnabled = true;
-            cbBaud.Location = new Point(11, 83);
+            cbBaud.Location = new Point(51, 244);
             cbBaud.Name = "cbBaud";
-            cbBaud.Size = new Size(156, 23);
-            cbBaud.TabIndex = 2;
+            cbBaud.Size = new Size(131, 23);
+            cbBaud.TabIndex = 3;
+            cbBaud.SelectedIndexChanged += cbBaud_SelectedIndexChanged;
             // 
             // cbDrive
             // 
             cbDrive.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             cbDrive.FormattingEnabled = true;
-            cbDrive.Location = new Point(11, 52);
+            cbDrive.Location = new Point(51, 213);
             cbDrive.Name = "cbDrive";
-            cbDrive.Size = new Size(156, 23);
+            cbDrive.Size = new Size(131, 23);
             cbDrive.TabIndex = 2;
+            cbDrive.SelectedIndexChanged += cbDrive_SelectedIndexChanged;
             // 
             // label2
             // 
@@ -380,7 +491,7 @@
             label2.Font = new Font("Comic Sans MS", 18F, FontStyle.Regular, GraphicsUnit.Point);
             label2.Location = new Point(5, 5);
             label2.Name = "label2";
-            label2.Size = new Size(605, 42);
+            label2.Size = new Size(466, 42);
             label2.TabIndex = 1;
             label2.Text = "RESULT";
             label2.TextAlign = ContentAlignment.MiddleCenter;
@@ -424,10 +535,12 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBoxDetect).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             contextMenuStripDeleteModule.ResumeLayout(false);
             ResumeLayout(false);
@@ -455,7 +568,6 @@
         private ComboBox cbBaud;
         private CheckBox cbSerial;
         private SplitContainer splitContainer2;
-        private RichTextBox richTextBox1;
         private PictureBox pictureBox2;
         private Panel panel2;
         private ContextMenuStrip contextMenuStripDeleteModule;
@@ -469,5 +581,15 @@
         private ToolStripMenuItem listModuleToolStripMenuItem;
         private RichTextBox richTextBox2;
         private PictureBox pictureBoxDetect;
+        private DataGridView dataGridView1;
+        private TextBox txtModel;
+        private TextBox txtName;
+        private PictureBox pictureBox3;
+        private Label label7;
+        private Label label6;
+        private Label label5;
+        private Label label4;
+        private Label label3;
+        private Button btnLoading;
     }
 }

@@ -9,6 +9,8 @@ namespace Object_Detection.SQliteDataAccess
     public class History
     {
         public int id { get; set; }
+        public string name { get; set; }
+        public string model { get; set; }
         public string image_path_master { get; set; }
         public string image_path_result { get; set; }
         public string result { get; set; }
@@ -16,13 +18,25 @@ namespace Object_Detection.SQliteDataAccess
         public string updated_at { get; set; }
 
         public History(){
-            string sql = "CREATE TABLE IF NOT EXISTS 'history' ('id' INTEGER NOT NULL, 'image_path_master' TEXT, 'image_path_result' TEXT, 'result' TEXT, 'created_at' TEXT, 'updated_at' TEXT, PRIMARY KEY('id' AUTOINCREMENT));";
+            string sql = @"CREATE TABLE IF NOT EXISTS history (
+	                    id	INTEGER NOT NULL,
+	                    name	TEXT,
+	                    model	TEXT,
+	                    image_path_master	TEXT,
+	                    image_path_result	TEXT,
+	                    result	TEXT,
+	                    created_at	TEXT,
+	                    updated_at	TEXT,
+	                    PRIMARY KEY(id AUTOINCREMENT)
+                    )";
             SQliteDataAccess.Execute(sql, null);
         }
 
         public void Save(){
-            string sql = @"INSERT INTO history (image_path_master, image_path_result, result, created_at, updated_at) VALUES (@image_path_master, @image_path_result, @result, @created_at, @updated_at)";
+            string sql = @"INSERT INTO history (name, model, image_path_master, image_path_result, result, created_at, updated_at) VALUES (@name, @model, @image_path_master, @image_path_result, @result, @created_at, @updated_at)";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@name", name);
+            parameters.Add("@model", model);
             parameters.Add("@image_path_master", image_path_master);
             parameters.Add("@image_path_result", image_path_result);
             parameters.Add("@result", result);
@@ -32,14 +46,13 @@ namespace Object_Detection.SQliteDataAccess
         }
 
         public void Update(){
-            string sql = @"UPDATE history SET image_path_master = @image_path_master, image_path_result = @image_path_result, result = @result, updated_at = @updated_at WHERE id = @id";
+            string sql = @"UPDATE history SET name = @name, model = @model, image_path_master = @image_path_master, image_path_result = @image_path_result, result = @result, updated_at = @updated_at WHERE id = @id";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("@id", id);
+            parameters.Add("@name", name);
+            parameters.Add("@model", model);
             parameters.Add("@image_path_master", image_path_master);
             parameters.Add("@image_path_result", image_path_result);
-            parameters.Add("@result", result);
-            parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
-            SQliteDataAccess.Execute(sql, parameters);
+            
         }
 
         public void Delete(){

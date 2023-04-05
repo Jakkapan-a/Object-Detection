@@ -41,6 +41,11 @@ namespace Object_Detection
         private List<SQliteDataAccess.Module> modules;
 
         private History history;
+
+        private int oldDriveIndex = -1;
+        private int oldBaudIndex = -1;
+        private int oldCOMIndex = -1;
+
         public Main()
         {
             InitializeComponent();
@@ -118,31 +123,38 @@ namespace Object_Detection
             try
             {
                 stopwatch.Restart();
-                //if (imgDetection != null)
-                //{
-                //    imgPrediction?.Dispose();
-                //    imgPrediction = (Image)imgDetection.Clone();
-                //}
-                predictions = yolo.Predict((Image)imgDetection.Clone());
-                Thread.Sleep(500);
+                if (imgDetection != null)
+                {
+                    imgPrediction?.Dispose();
+                    imgPrediction = (Image)imgDetection.Clone();
+                }
+                predictions = yolo.Predict(imgPrediction);
+                Thread.Sleep(300);
                 stopwatch.Stop();
                 Debug.WriteLine("Time {0}ms", stopwatch.ElapsedMilliseconds);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                Debug.WriteLine("E01 "+ex.Message);
+                Debug.WriteLine("E01 " + ex.Message);
+                toolStripStatusError.Text = "E01 " + ex.Message;
+                toolStripStatusError.ForeColor = Color.Red;
             }
         }
 
         private string readDataSerial = string.Empty;
         private string dataSerialReceived = string.Empty;
-
+        private Task renderTable;
         private void Main_Load(object sender, EventArgs e)
         {
-            loading();
+            btnLoading.PerformClick();
             DeleteOldFile();
+            renderTable = Task.Run(() =>
+            {
+                RenderTable();
+            });
         }
 
-        public void loading()
+        public void loading(object? sender, EventArgs? e)
         {
             var drive = new List<DsDevice>(DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice));
 
@@ -152,21 +164,38 @@ namespace Object_Detection
                 cbDrive.Items.Add(device.Name);
             }
             drive.Clear();
-
-            if (cbDrive.Items.Count > 0)
+            if (oldDriveIndex != -1 && cbDrive.Items.Count > oldDriveIndex)
+            {
+                cbDrive.SelectedIndex = oldDriveIndex;
+            }
+            else if (cbDrive.Items.Count > 0)
+            {
                 cbDrive.SelectedIndex = 0;
+            }
 
             cbBaud.Items.Clear();
             cbBaud.Items.AddRange(baudList);
 
-            if (cbBaud.Items.Count > 0)
+            if (oldBaudIndex != -1 && cbBaud.Items.Count > oldBaudIndex)
+            {
+                cbBaud.SelectedIndex = oldBaudIndex;
+            }
+            else if (cbBaud.Items.Count > 0)
+            {
                 cbBaud.SelectedIndex = baudList.Length - 1;
+            }
 
             cbCOM.Items.Clear();
             cbCOM.Items.AddRange(SerialPort.GetPortNames());
 
-            if (cbCOM.Items.Count > 0)
+            if (oldCOMIndex != -1 && cbCOM.Items.Count > oldCOMIndex)
+            {
+                cbCOM.SelectedIndex = oldCOMIndex;
+            }
+            else if (cbCOM.Items.Count > 0)
+            {
                 cbCOM.SelectedIndex = 0;
+            }
         }
 
         private void MyCapture_OnError(string messages)
@@ -224,6 +253,9 @@ namespace Object_Detection
                 history.image_path_master = filename_master;
                 history.image_path_result = filename;
                 history.result = labelOBJ;
+
+                history.name = txtName.Text;
+                history.model = txtModel.Text;
                 if (labelOBJ == "NG")
                 {
                     serialCommand("ng");
@@ -241,10 +273,126 @@ namespace Object_Detection
                 {
                     history.Save();
                 }
+
+                if (renderTable.Status != TaskStatus.Running)
+                {
+                    renderTable = Task.Run(() =>
+                    {
+                        RenderTable();
+                    });
+                }
+
                 isObjDetect = false;
             }
         }
+        private void RenderTable()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => RenderTable()));
+                return;
+            }
+            var histories = History.Get();
+            if (histories.Count > 0)
+            {
+                DataTable dt = CreateDataTable();
+                PopulateDataTable(dt);
+                SetupDataGridView(dt);
+                LoadImagesToDataGridView();
+            }
+        }
 
+        private DataTable CreateDataTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No", typeof(int));
+            dt.Columns.Add("id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Model", typeof(string));
+            dt.Columns.Add("ImagePathMaster", typeof(string));
+            dt.Columns.Add("ImagePathResult", typeof(string));
+            dt.Columns.Add("Result", typeof(string));
+            dt.Columns.Add("Date", typeof(string));
+            return dt;
+        }
+        private void PopulateDataTable(DataTable dt)
+        {
+            var modules = History.Get();
+            int rowNumber = 0;
+            foreach (var item in modules)
+            {
+                dt.Rows.Add(++rowNumber, item.id, item.name, item.model, item.image_path_master, item.image_path_result, item.result, item.updated_at);
+            }
+        }
+        private void SetupDataGridView(DataTable dt)
+        {
+            // Clear the dataGridView1 before updating
+            dataGridView1.DataSource = null;
+            dataGridView1.Columns.Clear();
+            dataGridView1.Rows.Clear();
+            dataGridView1.ClearSelection();
+            dataGridView1.DataSource = dt;
+
+            DataGridViewImageColumn imageColumnMaster = new DataGridViewImageColumn();
+            imageColumnMaster.Name = "ImageMaster";
+            imageColumnMaster.HeaderText = "ImageMaster";
+            imageColumnMaster.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            imageColumnMaster.Width = 100;
+            dataGridView1.Columns.Insert(5, imageColumnMaster);
+            dataGridView1.RowTemplate.Height = 100;
+            // Hide the id column and the image path master column
+            dataGridView1.Columns["id"].Visible = false;
+            dataGridView1.Columns["ImagePathMaster"].Visible = false;
+
+            // Set the column width of the image path result column
+            DataGridViewImageColumn imageColumnResult = new DataGridViewImageColumn();
+            imageColumnResult.Name = "ImageResult";
+            imageColumnResult.HeaderText = "ImageResult";
+            imageColumnResult.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            imageColumnResult.Width = 100;
+            dataGridView1.Columns.Insert(6, imageColumnResult);
+            dataGridView1.RowTemplate.Height = 100;
+            // Hide the id column and the image path master column
+            dataGridView1.Columns["ImagePathResult"].Visible = false;
+            dataGridView1.ClearSelection();
+
+            // Set the column No 10%
+            dataGridView1.Columns["No"].Width = (int)(dataGridView1.Width * 0.1);
+            dataGridView1.Columns["Date"].Width = (int)(dataGridView1.Width * 0.15);
+
+        }
+        private void LoadImagesToDataGridView()
+        {
+            try
+            {
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    if (row.Cells["ImagePathMaster"].Value != null)
+                    {
+                        string imagePath = row.Cells["ImagePathMaster"].Value.ToString();
+                        if (File.Exists(Path.Combine(Properties.Resources.path_history, imagePath)))
+                        {
+                            row.Cells["ImageMaster"].Value = Image.FromFile(Path.Combine(Properties.Resources.path_history, imagePath));
+                        }
+                    }
+                    if (row.Cells["ImagePathResult"].Value != null)
+                    {
+                        string imagePath = row.Cells["ImagePathResult"].Value.ToString();
+                        if (File.Exists(Path.Combine(Properties.Resources.path_history, imagePath)))
+                        {
+                            row.Cells["ImageResult"].Value = Image.FromFile(Path.Combine(Properties.Resources.path_history, imagePath));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                toolStripStatusError.Text = ex.Message;
+                toolStripStatusError.BackColor = Color.Red;
+            }
+
+        }
         private Stopwatch stopwatchFrame = new Stopwatch();
         private long frameCount = 0;
         private double frameRate = 0;
@@ -292,6 +440,23 @@ namespace Object_Detection
                     {
                         throw new Exception("Invalid drive camera");
                     }
+
+                    if (txtModel.Text == string.Empty)
+                    {
+                        this.ActiveControl = txtModel;
+                        txtModel.Focus();
+
+                        throw new Exception("Invalid model");
+                    }
+
+                    if (txtName.Text == string.Empty)
+                    {
+                        this.ActiveControl = txtName;
+                        txtName.Focus();
+
+                        throw new Exception("Invalid name!");
+                    }
+
                     btnConnect.Text = "Connecting";
                     pictureBox1.Image = null;
                     pictureBox1.Image = Properties.Resources.Spinner_0_4s_800px;
@@ -323,7 +488,8 @@ namespace Object_Detection
                     }
                     else
                     {
-                        Debug.WriteLine("NG");
+                        Debug.WriteLine("File not found");
+                        MessageBox.Show("File not found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     btnConnect.Text = "Disconnect";
                     lbName.Text = "Processing..";
@@ -359,11 +525,25 @@ namespace Object_Detection
                     toolStripStatusSerial.Text = $"Serial: {serialPort.PortName} - {serialPort.BaudRate}";
                     toolStripStatusSerial.ForeColor = Color.Red;
                 }
+                toolStripStatusError.Text = string.Empty;
             }
             catch (Exception ex)
             {
+                if (isConnect)
+                {
+                    myCapture.Stop();
+                    btnConnect.Text = "Connect";
+                    pictureBox1.Image?.Dispose();
+                    pictureBox1.Image = null;
+                    if (this.serialPort != null && this.serialPort.IsOpen)
+                    {
+                        this.serialPort.Close();
+                    }
+                }
+                isConnect = !isConnect;
                 toolStripStatusError.Text = ex.Message;
                 toolStripStatusError.ForeColor = Color.Red;
+                MessageBox.Show("E02 " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -586,6 +766,39 @@ namespace Object_Detection
             listModules = new Forms.ListModules();
             listModules.Show();
         }
+
+        private void cbDrive_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            oldDriveIndex = (int)cbDrive.SelectedIndex;
+        }
+
+        private void cbBaud_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            oldBaudIndex = (int)cbBaud.SelectedIndex;
+        }
+
+        private void cbCOM_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            oldCOMIndex = (int)cbCOM.SelectedIndex;
+        }
+        private void txtModel_KeyDown(object sender, KeyEventArgs e)
+        {
+            // If key enter is txtName focus
+            if (e.KeyCode == Keys.Enter)
+            {
+                this.ActiveControl = txtName;
+                txtName.Focus();
+            }
+        }
+        private void txtName_KeyDown(object sender, KeyEventArgs e)
+        {
+            // If key enter is txtName focus
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnConnect.PerformClick();
+            }
+        }
+
 
     }
 }
