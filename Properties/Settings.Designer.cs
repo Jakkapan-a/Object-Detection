@@ -22,5 +22,65 @@ namespace Object_Detection.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int dFocus {
+            get {
+                return ((int)(this["dFocus"]));
+            }
+            set {
+                this["dFocus"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int dZoom {
+            get {
+                return ((int)(this["dZoom"]));
+            }
+            set {
+                this["dZoom"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int dPan {
+            get {
+                return ((int)(this["dPan"]));
+            }
+            set {
+                this["dPan"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int dTilt {
+            get {
+                return ((int)(this["dTilt"]));
+            }
+            set {
+                this["dTilt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int dExposure {
+            get {
+                return ((int)(this["dExposure"]));
+            }
+            set {
+                this["dExposure"] = value;
+            }
+        }
     }
 }

@@ -101,6 +101,16 @@ namespace Object_Detection.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap edit_production_order_32 {
+            get {
+                object obj = ResourceManager.GetObject("edit_production_order_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon icons8_Plus {
@@ -127,6 +137,15 @@ namespace Object_Detection.Properties {
             get {
                 object obj = ResourceManager.GetObject("ONNX_logo_main", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ./system/capture.
+        /// </summary>
+        internal static string path_capture {
+            get {
+                return ResourceManager.GetString("path_capture", resourceCulture);
             }
         }
         
@@ -169,6 +188,16 @@ namespace Object_Detection.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap screenshot_32 {
+            get {
+                object obj = ResourceManager.GetObject("screenshot_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Spinner_0_4s_800px {
             get {
                 object obj = ResourceManager.GetObject("Spinner-0.4s-800px", resourceCulture);
@@ -182,6 +211,16 @@ namespace Object_Detection.Properties {
         internal static System.Drawing.Bitmap Trash_32 {
             get {
                 object obj = ResourceManager.GetObject("Trash_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap upload {
+            get {
+                object obj = ResourceManager.GetObject("upload", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

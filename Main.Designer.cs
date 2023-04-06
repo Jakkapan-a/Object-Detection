@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             uploadModuleToolStripMenuItem = new ToolStripMenuItem();
             listModuleToolStripMenuItem = new ToolStripMenuItem();
             imageToolStripMenuItem = new ToolStripMenuItem();
             captureToolStripMenuItem = new ToolStripMenuItem();
-            uploadMasterImageToolStripMenuItem = new ToolStripMenuItem();
             cameraToolStripMenuItem = new ToolStripMenuItem();
             settingToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
@@ -43,6 +43,7 @@
             toolStripStatusSerial = new ToolStripStatusLabel();
             toolStripStatusError = new ToolStripStatusLabel();
             toolStripStatusSerialData = new ToolStripStatusLabel();
+            toolStripStatusTime = new ToolStripStatusLabel();
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
             pictureBox1 = new PictureBox();
@@ -110,37 +111,34 @@
             // uploadModuleToolStripMenuItem
             // 
             uploadModuleToolStripMenuItem.Name = "uploadModuleToolStripMenuItem";
-            uploadModuleToolStripMenuItem.Size = new Size(156, 22);
+            uploadModuleToolStripMenuItem.Size = new Size(180, 22);
             uploadModuleToolStripMenuItem.Text = "Upload module";
+            uploadModuleToolStripMenuItem.Visible = false;
             uploadModuleToolStripMenuItem.Click += uploadModuleToolStripMenuItem_Click;
             // 
             // listModuleToolStripMenuItem
             // 
+            listModuleToolStripMenuItem.Image = Properties.Resources.upload;
             listModuleToolStripMenuItem.Name = "listModuleToolStripMenuItem";
-            listModuleToolStripMenuItem.Size = new Size(156, 22);
+            listModuleToolStripMenuItem.Size = new Size(180, 22);
             listModuleToolStripMenuItem.Text = "List module";
             listModuleToolStripMenuItem.Click += listModuleToolStripMenuItem_Click;
             // 
             // imageToolStripMenuItem
             // 
-            imageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { captureToolStripMenuItem, uploadMasterImageToolStripMenuItem });
+            imageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { captureToolStripMenuItem });
             imageToolStripMenuItem.Name = "imageToolStripMenuItem";
             imageToolStripMenuItem.Size = new Size(52, 20);
             imageToolStripMenuItem.Text = "Image";
             // 
             // captureToolStripMenuItem
             // 
+            captureToolStripMenuItem.Image = Properties.Resources.screenshot_32;
             captureToolStripMenuItem.Name = "captureToolStripMenuItem";
             captureToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Z;
-            captureToolStripMenuItem.Size = new Size(187, 22);
+            captureToolStripMenuItem.Size = new Size(180, 22);
             captureToolStripMenuItem.Text = "Capture";
             captureToolStripMenuItem.Click += captureToolStripMenuItem_Click;
-            // 
-            // uploadMasterImageToolStripMenuItem
-            // 
-            uploadMasterImageToolStripMenuItem.Name = "uploadMasterImageToolStripMenuItem";
-            uploadMasterImageToolStripMenuItem.Size = new Size(187, 22);
-            uploadMasterImageToolStripMenuItem.Text = "Upload Master Image";
             // 
             // cameraToolStripMenuItem
             // 
@@ -151,14 +149,15 @@
             // 
             // settingToolStripMenuItem
             // 
+            settingToolStripMenuItem.Image = Properties.Resources.edit_production_order_32;
             settingToolStripMenuItem.Name = "settingToolStripMenuItem";
-            settingToolStripMenuItem.Size = new Size(119, 22);
+            settingToolStripMenuItem.Size = new Size(180, 22);
             settingToolStripMenuItem.Text = "Controls";
             settingToolStripMenuItem.Click += settingToolStripMenuItem_Click;
             // 
             // statusStrip1
             // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel, toolStripStatusSerial, toolStripStatusError, toolStripStatusSerialData });
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel, toolStripStatusSerial, toolStripStatusError, toolStripStatusSerialData, toolStripStatusTime });
             statusStrip1.Location = new Point(0, 578);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(1154, 24);
@@ -191,6 +190,12 @@
             toolStripStatusSerialData.Name = "toolStripStatusSerialData";
             toolStripStatusSerialData.Size = new Size(16, 19);
             toolStripStatusSerialData.Text = "-";
+            // 
+            // toolStripStatusTime
+            // 
+            toolStripStatusTime.Name = "toolStripStatusTime";
+            toolStripStatusTime.Size = new Size(12, 19);
+            toolStripStatusTime.Text = "-";
             // 
             // splitContainer1
             // 
@@ -517,6 +522,7 @@
             Controls.Add(splitContainer1);
             Controls.Add(statusStrip1);
             Controls.Add(menuStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Name = "Main";
             StartPosition = FormStartPosition.CenterScreen;
@@ -577,7 +583,6 @@
         private ToolStripStatusLabel toolStripStatusError;
         private ToolStripStatusLabel toolStripStatusSerialData;
         private ToolStripMenuItem uploadModuleToolStripMenuItem;
-        private ToolStripMenuItem uploadMasterImageToolStripMenuItem;
         private ToolStripMenuItem listModuleToolStripMenuItem;
         private RichTextBox richTextBox2;
         private PictureBox pictureBoxDetect;
@@ -591,5 +596,6 @@
         private Label label4;
         private Label label3;
         private Button btnLoading;
+        private ToolStripStatusLabel toolStripStatusTime;
     }
 }

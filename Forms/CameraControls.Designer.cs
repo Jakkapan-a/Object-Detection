@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CameraControls));
             label1 = new Label();
             btSave = new Button();
             label5 = new Label();
@@ -77,6 +78,7 @@
             btSave.TabIndex = 18;
             btSave.Text = "Save";
             btSave.UseVisualStyleBackColor = true;
+            btSave.Click += btSave_Click;
             // 
             // label5
             // 
@@ -225,6 +227,7 @@
             Controls.Add(tZoom);
             Controls.Add(tFocus);
             Controls.Add(label1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "CameraControls";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CameraControls";

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ListModules));
             statusStrip1 = new StatusStrip();
             toolStripStatusLabelId = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
@@ -52,9 +53,12 @@
             label4 = new Label();
             btnClear = new Button();
             dataGridView1 = new DataGridView();
-            label6 = new Label();
             contextMenuStrip1 = new ContextMenuStrip(components);
             deleteToolStripMenuItem = new ToolStripMenuItem();
+            label6 = new Label();
+            txtLabel = new TextBox();
+            btnLabel = new Button();
+            label7 = new Label();
             statusStrip1.SuspendLayout();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -111,7 +115,7 @@
             // txtModule
             // 
             txtModule.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtModule.Location = new Point(75, 169);
+            txtModule.Location = new Point(75, 156);
             txtModule.Name = "txtModule";
             txtModule.Size = new Size(169, 23);
             txtModule.TabIndex = 0;
@@ -119,7 +123,7 @@
             // btnModule
             // 
             btnModule.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            btnModule.Location = new Point(252, 168);
+            btnModule.Location = new Point(252, 155);
             btnModule.Name = "btnModule";
             btnModule.Size = new Size(27, 23);
             btnModule.TabIndex = 1;
@@ -130,7 +134,7 @@
             // btnImage
             // 
             btnImage.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            btnImage.Location = new Point(252, 213);
+            btnImage.Location = new Point(252, 231);
             btnImage.Name = "btnImage";
             btnImage.Size = new Size(27, 23);
             btnImage.TabIndex = 1;
@@ -141,7 +145,7 @@
             // txtImage
             // 
             txtImage.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtImage.Location = new Point(75, 213);
+            txtImage.Location = new Point(75, 231);
             txtImage.Name = "txtImage";
             txtImage.Size = new Size(169, 23);
             txtImage.TabIndex = 0;
@@ -149,7 +153,7 @@
             // txtName
             // 
             txtName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtName.Location = new Point(75, 129);
+            txtName.Location = new Point(75, 126);
             txtName.Name = "txtName";
             txtName.Size = new Size(204, 23);
             txtName.TabIndex = 0;
@@ -180,6 +184,7 @@
             panel2.BackColor = SystemColors.ControlLight;
             panel2.BorderStyle = BorderStyle.FixedSingle;
             panel2.Controls.Add(cbActive);
+            panel2.Controls.Add(label7);
             panel2.Controls.Add(label3);
             panel2.Controls.Add(label2);
             panel2.Controls.Add(label1);
@@ -191,7 +196,9 @@
             panel2.Controls.Add(txtModule);
             panel2.Controls.Add(btnClear);
             panel2.Controls.Add(btnSave);
+            panel2.Controls.Add(btnLabel);
             panel2.Controls.Add(btnImage);
+            panel2.Controls.Add(txtLabel);
             panel2.Controls.Add(txtImage);
             panel2.Dock = DockStyle.Right;
             panel2.Location = new Point(548, 80);
@@ -205,7 +212,7 @@
             cbActive.AutoSize = true;
             cbActive.Checked = true;
             cbActive.CheckState = CheckState.Checked;
-            cbActive.Location = new Point(185, 339);
+            cbActive.Location = new Point(185, 355);
             cbActive.Name = "cbActive";
             cbActive.Size = new Size(59, 19);
             cbActive.TabIndex = 5;
@@ -215,7 +222,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(21, 217);
+            label3.Location = new Point(21, 235);
             label3.Name = "label3";
             label3.Size = new Size(40, 15);
             label3.TabIndex = 4;
@@ -224,7 +231,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(21, 177);
+            label2.Location = new Point(21, 160);
             label2.Name = "label2";
             label2.Size = new Size(48, 15);
             label2.TabIndex = 4;
@@ -233,7 +240,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(29, 134);
+            label1.Location = new Point(29, 131);
             label1.Name = "label1";
             label1.Size = new Size(39, 15);
             label1.TabIndex = 4;
@@ -243,7 +250,7 @@
             // 
             pictureBoxTemp.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             pictureBoxTemp.BackColor = SystemColors.Control;
-            pictureBoxTemp.Location = new Point(75, 242);
+            pictureBoxTemp.Location = new Point(75, 258);
             pictureBoxTemp.Name = "pictureBoxTemp";
             pictureBoxTemp.Size = new Size(169, 91);
             pictureBoxTemp.SizeMode = PictureBoxSizeMode.Zoom;
@@ -266,7 +273,7 @@
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 8.25F, FontStyle.Underline, GraphicsUnit.Point);
             label4.ForeColor = Color.Red;
-            label4.Location = new Point(182, 195);
+            label4.Location = new Point(182, 183);
             label4.Name = "label4";
             label4.Size = new Size(99, 13);
             label4.TabIndex = 3;
@@ -300,16 +307,6 @@
             dataGridView1.TabIndex = 5;
             dataGridView1.SelectionChanged += dataGridView1_SelectionChanged;
             // 
-            // label6
-            // 
-            label6.Font = new Font("Segoe UI", 9F, FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point);
-            label6.Location = new Point(9, 83);
-            label6.Name = "label6";
-            label6.Size = new Size(301, 21);
-            label6.TabIndex = 0;
-            label6.Text = "Table";
-            label6.TextAlign = ContentAlignment.MiddleLeft;
-            // 
             // contextMenuStrip1
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { deleteToolStripMenuItem });
@@ -324,6 +321,44 @@
             deleteToolStripMenuItem.Text = "Delete";
             deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
+            // label6
+            // 
+            label6.Font = new Font("Segoe UI", 9F, FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point);
+            label6.Location = new Point(9, 83);
+            label6.Name = "label6";
+            label6.Size = new Size(301, 21);
+            label6.TabIndex = 0;
+            label6.Text = "Table";
+            label6.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // txtLabel
+            // 
+            txtLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtLabel.Location = new Point(75, 202);
+            txtLabel.Name = "txtLabel";
+            txtLabel.Size = new Size(169, 23);
+            txtLabel.TabIndex = 0;
+            // 
+            // btnLabel
+            // 
+            btnLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            btnLabel.Location = new Point(252, 202);
+            btnLabel.Name = "btnLabel";
+            btnLabel.Size = new Size(27, 23);
+            btnLabel.TabIndex = 1;
+            btnLabel.Text = "...";
+            btnLabel.UseVisualStyleBackColor = true;
+            btnLabel.Click += btnImage_Click;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(21, 206);
+            label7.Name = "label7";
+            label7.Size = new Size(35, 15);
+            label7.TabIndex = 4;
+            label7.Text = "Label";
+            // 
             // ListModules
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -334,7 +369,9 @@
             Controls.Add(panel2);
             Controls.Add(panel1);
             Controls.Add(statusStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ListModules";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "ListModules";
             Load += ListModules_Load;
             statusStrip1.ResumeLayout(false);
@@ -378,5 +415,8 @@
         private ToolStripProgressBar toolStripProgressBarUpload2;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem deleteToolStripMenuItem;
+        private Label label7;
+        private Button btnLabel;
+        private TextBox txtLabel;
     }
 }

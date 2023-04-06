@@ -11,7 +11,12 @@
     <FileVersion>1.0.0.2</FileVersion>
     <AssemblyVersion>1.0.0.2</AssemblyVersion>
     <NeutralLanguage>en-GB</NeutralLanguage>
+    <ApplicationIcon>Group_Objects.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Group_Objects.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />

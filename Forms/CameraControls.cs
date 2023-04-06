@@ -177,5 +177,24 @@ namespace Object_Detection.Forms
                 Debug.WriteLine(ex.Message);
             }
         }
+
+        private void btSave_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Properties.Settings.Default.dFocus = tFocus.Value;
+                Properties.Settings.Default.dZoom = tZoom.Value;
+                Properties.Settings.Default.dPan = tPan.Value;
+                Properties.Settings.Default.dTilt = tTilt.Value;
+                Properties.Settings.Default.dExposure = tExposure.Value;
+
+                Properties.Settings.Default.Save();
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error 018:" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

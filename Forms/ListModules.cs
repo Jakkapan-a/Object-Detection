@@ -308,7 +308,7 @@ namespace Object_Detection.Forms
             dataGridView1.RowTemplate.Height = 100;
             dataGridView1.Columns["ImagePath"].Visible = false;
             dataGridView1.Columns["id"].Visible = false;
-            
+
             dataGridView1.Columns["No"].Width = (int)(dataGridView1.Width * 0.1);
             dataGridView1.Columns["Date"].Width = (int)(dataGridView1.Width * 0.15);
             dataGridView1.ClearSelection();
@@ -329,7 +329,8 @@ namespace Object_Detection.Forms
             {
                 loaded = true;
                 RenderData();
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

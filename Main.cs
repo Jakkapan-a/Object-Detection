@@ -62,6 +62,7 @@ namespace Object_Detection
             bgObjDetection = new BackgroundWorker();
             bgObjDetection.DoWork += BgObjDetection_DoWork;
             bgObjDetection.RunWorkerCompleted += BgObjDetection_RunWorkerCompleted;
+            bgObjDetection.ProgressChanged += BgObjDetection_ProgressChanged;
             bgObjDetection.WorkerSupportsCancellation = true;
             bgObjDetection.WorkerReportsProgress = true;
 
@@ -70,6 +71,18 @@ namespace Object_Detection
             history = new History();
 
         }
+
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+            btnLoading.PerformClick();
+            DeleteOldFile();
+            renderTable = Task.Run(() =>
+            {
+                RenderTable();
+            });
+        }
+
         private Task taskDeleteOldFile;
 
         private void DeleteOldFile()
@@ -113,6 +126,11 @@ namespace Object_Detection
         }
 
 
+        private void BgObjDetection_ProgressChanged(object? sender, ProgressChangedEventArgs e)
+        {
+            toolStripStatusTime.Text = "Time " + stopwatch.ElapsedMilliseconds + "ms";
+        }
+
         private void BgObjDetection_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
         {
 
@@ -122,6 +140,8 @@ namespace Object_Detection
         {
             try
             {
+                BackgroundWorker worker = sender as BackgroundWorker;
+
                 stopwatch.Restart();
                 if (imgDetection != null)
                 {
@@ -132,6 +152,8 @@ namespace Object_Detection
                 Thread.Sleep(300);
                 stopwatch.Stop();
                 Debug.WriteLine("Time {0}ms", stopwatch.ElapsedMilliseconds);
+
+                worker.ReportProgress(0);
             }
             catch (Exception ex)
             {
@@ -143,16 +165,10 @@ namespace Object_Detection
 
         private string readDataSerial = string.Empty;
         private string dataSerialReceived = string.Empty;
+
         private Task renderTable;
-        private void Main_Load(object sender, EventArgs e)
-        {
-            btnLoading.PerformClick();
-            DeleteOldFile();
-            renderTable = Task.Run(() =>
-            {
-                RenderTable();
-            });
-        }
+
+
 
         public void loading(object? sender, EventArgs? e)
         {
@@ -207,6 +223,17 @@ namespace Object_Detection
         private void MyCapture_OnVideoStarted()
         {
             Debug.WriteLine("Video Started");
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => MyCapture_OnVideoStarted()));
+                return;
+            }
+
+            cameraControl.setFocus(Properties.Settings.Default.dFocus);
+            cameraControl.setZoom(Properties.Settings.Default.dZoom);
+            cameraControl.setPan(Properties.Settings.Default.dPan);
+            cameraControl.setTilt(Properties.Settings.Default.dTilt);
+            cameraControl.setExposure(Properties.Settings.Default.dExposure);
         }
 
         private void MyCapture_OnFrameHeader(Bitmap bitmap)
@@ -285,6 +312,7 @@ namespace Object_Detection
                 isObjDetect = false;
             }
         }
+
         private void RenderTable()
         {
             if (InvokeRequired)
@@ -315,6 +343,7 @@ namespace Object_Detection
             dt.Columns.Add("Date", typeof(string));
             return dt;
         }
+
         private void PopulateDataTable(DataTable dt)
         {
             var modules = History.Get();
@@ -324,6 +353,7 @@ namespace Object_Detection
                 dt.Rows.Add(++rowNumber, item.id, item.name, item.model, item.image_path_master, item.image_path_result, item.result, item.updated_at);
             }
         }
+
         private void SetupDataGridView(DataTable dt)
         {
             // Clear the dataGridView1 before updating
@@ -361,6 +391,7 @@ namespace Object_Detection
             dataGridView1.Columns["Date"].Width = (int)(dataGridView1.Width * 0.15);
 
         }
+
         private void LoadImagesToDataGridView()
         {
             try
@@ -393,6 +424,7 @@ namespace Object_Detection
             }
 
         }
+
         private Stopwatch stopwatchFrame = new Stopwatch();
         private long frameCount = 0;
         private double frameRate = 0;
@@ -458,7 +490,7 @@ namespace Object_Detection
                     }
 
                     btnConnect.Text = "Connecting";
-                    pictureBox1.Image = null;
+                    pictureBox1.Image?.Dispose();
                     pictureBox1.Image = Properties.Resources.Spinner_0_4s_800px;
                     camIndex = cbDrive.SelectedIndex;
                     openTask = Task.Run(() =>
@@ -565,12 +597,12 @@ namespace Object_Detection
             {
                 string filename = Guid.NewGuid().ToString() + ".jpg";
 
-                if (!Directory.Exists(Properties.Resources.path_images))
-                    Directory.CreateDirectory(Properties.Resources.path_images);
+                if (!Directory.Exists(Properties.Resources.path_capture))
+                    Directory.CreateDirectory(Properties.Resources.path_capture);
 
                 toolStripStatusLabel.Text = filename;
-                filename = Path.Combine(Properties.Resources.path_images, filename);
-                pictureBox1.Image?.Save(filename, ImageFormat.Jpeg);
+                filename = Path.Combine(Properties.Resources.path_capture, filename);
+                imgDetection?.Save(filename, ImageFormat.Jpeg);
             }
             catch (Exception ex)
             {
@@ -798,7 +830,5 @@ namespace Object_Detection
                 btnConnect.PerformClick();
             }
         }
-
-
     }
 }
