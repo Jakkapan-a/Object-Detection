@@ -24,6 +24,8 @@ namespace Object_Detection.Forms
         private string pathModule = string.Empty;
         private string newModuleName = string.Empty;
 
+        private string pathLabel = string.Empty;
+        private string newLabelName = string.Empty;
         private readonly BackgroundWorker bgWorker;
         public ListModules()
         {
@@ -51,6 +53,7 @@ namespace Object_Detection.Forms
                     name = txtName.Text,
                     path = newModuleName,
                     image = newImageName,
+                    path_label = newLabelName,
                 };
                 module.status = cbActive.Checked ? 1 : 0;
                 module.Save();
@@ -101,36 +104,46 @@ namespace Object_Detection.Forms
             {
                 newModuleName = Guid.NewGuid().ToString() + txtName.Text + ".onnx";
                 newImageName = Guid.NewGuid().ToString() + txtName.Text + ".jpg";
+                newLabelName = Guid.NewGuid().ToString() + txtName.Text + ".txt";
+                
+
 
                 // Use the correct paths for the source files
                 string sourceModulePath = pathModule;
                 string sourceImagePath = pathImage;
+                string sourceLabelPath = pathLabel;
 
                 string destinationModulePath = Path.Combine(Properties.Resources.path_weight, newModuleName);
                 string destinationImagePath = Path.Combine(Properties.Resources.path_images, newImageName);
+                string destinationLabelPath = Path.Combine(Properties.Resources.path_images, newLabelName);
 
                 var argsModule = new CopyFileArguments { SourcePath = sourceModulePath, DestinationPath = destinationModulePath };
                 var argsImage = new CopyFileArguments { SourcePath = sourceImagePath, DestinationPath = destinationImagePath };
+                var argsLabel = new CopyFileArguments { SourcePath = sourceLabelPath, DestinationPath = destinationLabelPath };
 
                 // Create two instances of BackgroundWorker
                 var worker1 = new BackgroundWorker { WorkerReportsProgress = true };
                 var worker2 = new BackgroundWorker { WorkerReportsProgress = true };
+                var worker3 = new BackgroundWorker { WorkerReportsProgress = true };
 
                 // Update progress bars separately
                 worker1.ProgressChanged += (s, e) => Invoke(new Action(() => toolStripProgressBarUpload1.Value = e.ProgressPercentage));
                 worker2.ProgressChanged += (s, e) => Invoke(new Action(() => toolStripProgressBarUpload2.Value = e.ProgressPercentage));
+                worker3.ProgressChanged += (s, e) => Invoke(new Action(() => toolStripProgressBarUpload1.Value = e.ProgressPercentage));
 
 
                 // Assign event handlers
                 worker1.DoWork += (s, e) => CopyFile.CopyFileWithProgress(argsModule.SourcePath, argsModule.DestinationPath, worker1);
                 worker2.DoWork += (s, e) => CopyFile.CopyFileWithProgress(argsImage.SourcePath, argsImage.DestinationPath, worker2);
+                worker3.DoWork += (s, e) => CopyFile.CopyFileWithProgress(argsLabel.SourcePath, argsLabel.DestinationPath, worker3);
 
                 // Run the workers
                 worker1.RunWorkerAsync();
                 worker2.RunWorkerAsync();
+                worker3.RunWorkerAsync();
 
                 // Wait for both workers to complete
-                while (worker1.IsBusy || worker2.IsBusy)
+                while (worker1.IsBusy || worker2.IsBusy || worker3.IsBusy)
                 {
                     Thread.Sleep(100); // Sleep for a short period to prevent blocking the UI
                 }
@@ -139,6 +152,7 @@ namespace Object_Detection.Forms
             {
                 newModuleName = string.Empty;
                 newImageName = string.Empty;
+                newLabelName = string.Empty;
             }
         }
 
@@ -178,6 +192,11 @@ namespace Object_Detection.Forms
                 return;
             }
 
+            if(string.IsNullOrEmpty(txtLabel.Text))
+            {
+                MessageBox.Show("Please enter label of module", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             // Check file exists or not
             if (!File.Exists(pathModule))
             {
@@ -188,6 +207,12 @@ namespace Object_Detection.Forms
             if (!File.Exists(pathImage))
             {
                 MessageBox.Show("Image file not exists", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if(!File.Exists(pathLabel))
+            {
+                MessageBox.Show("Label file not exists", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -221,6 +246,7 @@ namespace Object_Detection.Forms
             btnSave.Text = "Save";
             txtImage.Text = string.Empty;
             txtModule.Text = string.Empty;
+            txtLabel.Text = string.Empty;
             txtName.Text = string.Empty;
             pictureBoxTemp.Image?.Dispose();
             pictureBoxTemp.Image = null;
@@ -273,6 +299,7 @@ namespace Object_Detection.Forms
             dt.Columns.Add("No", typeof(int));
             dt.Columns.Add("id", typeof(int));
             dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Label", typeof(string));
             dt.Columns.Add("ONNX", typeof(string));
             dt.Columns.Add("ImagePath", typeof(string));
             dt.Columns.Add("Date", typeof(string));
@@ -285,7 +312,7 @@ namespace Object_Detection.Forms
             int rowNumber = 0;
             foreach (var item in modules)
             {
-                dt.Rows.Add(++rowNumber, item.id, item.name, item.path, item.image, item.updated_at);
+                dt.Rows.Add(++rowNumber, item.id, item.name,item.path_label, item.path, item.image, item.updated_at);
             }
         }
 
@@ -311,6 +338,8 @@ namespace Object_Detection.Forms
 
             dataGridView1.Columns["No"].Width = (int)(dataGridView1.Width * 0.1);
             dataGridView1.Columns["Date"].Width = (int)(dataGridView1.Width * 0.15);
+
+            dataGridView1.Columns["Label"].Visible = false;
             dataGridView1.ClearSelection();
         }
 
@@ -365,6 +394,9 @@ namespace Object_Detection.Forms
                 txtModule.Text = fullPathToModule;
                 pathModule = fullPathToModule;
 
+                txtLabel.Text = Convert.ToString(selectedRow.Cells["Label"].Value);
+                pathLabel = Convert.ToString(selectedRow.Cells["Label"].Value);                
+
                 txtName.Text = Convert.ToString(selectedRow.Cells["Name"].Value);
                 btnSave.Text = "Update";
 
@@ -383,6 +415,20 @@ namespace Object_Detection.Forms
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnLabel_Click(object sender, EventArgs e)
+        {
+            // Open file txt only
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.RestoreDirectory = true;
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                pathLabel = openFileDialog.FileName;
+                txtLabel.Text = pathLabel;
             }
         }
     }

@@ -348,7 +348,7 @@
             btnLabel.TabIndex = 1;
             btnLabel.Text = "...";
             btnLabel.UseVisualStyleBackColor = true;
-            btnLabel.Click += btnImage_Click;
+            btnLabel.Click += btnLabel_Click;
             // 
             // label7
             // 

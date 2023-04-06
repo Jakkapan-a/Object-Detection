@@ -308,7 +308,6 @@ namespace Object_Detection
                         RenderTable();
                     });
                 }
-
                 isObjDetect = false;
             }
         }
@@ -514,9 +513,18 @@ namespace Object_Detection
                     }
                     modules = SQliteDataAccess.Module.Get();
 
-                    if (File.Exists(Path.Combine(Properties.Resources.path_weight, modules[0].path)))
+
+                    if (File.Exists(Path.Combine(Properties.Resources.path_weight, modules[0].path)) && File.Exists(Path.Combine(Properties.Resources.path_images, modules[0].path_label)))
                     {
-                        yolo = YoloV5Predictor.Create(Path.Combine(Properties.Resources.path_weight, modules[0].path), new string[] { "OK", "NG" });
+                        // Read txt file label
+                        string[] lines = File.ReadAllLines(Path.Combine(Properties.Resources.path_images, modules[0].path_label));
+                        string[] labels = new string[lines.Length];
+                        for (int i = 0; i < lines.Length; i++)
+                        {
+                            labels[i] = lines[i];
+                        }
+                        // Create YoloV5Predictor                                                
+                        yolo = YoloV5Predictor.Create(Path.Combine(Properties.Resources.path_weight, modules[0].path),labels);
                     }
                     else
                     {
