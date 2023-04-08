@@ -513,7 +513,6 @@ namespace Object_Detection
                     }
                     modules = SQliteDataAccess.Module.Get();
 
-
                     if (File.Exists(Path.Combine(Properties.Resources.path_weight, modules[0].path)) && File.Exists(Path.Combine(Properties.Resources.path_images, modules[0].path_label)))
                     {
                         // Read txt file label
@@ -627,7 +626,9 @@ namespace Object_Detection
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             readDataSerial = serialPort.ReadLine();
+            #pragma warning disable CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
             _ = this.Invoke(new EventHandler(dataReceived));
+            #pragma warning restore CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
         }
 
         private void dataReceived(object sender, EventArgs e)
