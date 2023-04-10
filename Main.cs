@@ -17,6 +17,8 @@ using System.Runtime.Intrinsics.X86;
 using OpenCvSharp.Aruco;
 using System.Drawing;
 using Yolonet;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Object_Detection
 {
@@ -45,6 +47,11 @@ namespace Object_Detection
         private int oldDriveIndex = -1;
         private int oldBaudIndex = -1;
         private int oldCOMIndex = -1;
+
+        private DsDevice[] videoInputDevices;
+        private IGraphBuilder _graphBuilder;
+        private ICaptureGraphBuilder2 _captureGraphBuilder;
+        private IBaseFilter _captureFilter;
 
         public Main()
         {
@@ -90,7 +97,7 @@ namespace Object_Detection
             taskDeleteOldFile = Task.Run(() =>
             {
                 // Get files
-                var files = Directory.GetFiles(Properties.Resources.path_history, "*.jpg", SearchOption.AllDirectories);
+                var files = Directory.GetFiles(Properties.Resources.path_history, "*.png", SearchOption.AllDirectories);
                 // Delete files old 30 days
                 foreach (var file in files)
                 {
@@ -102,7 +109,7 @@ namespace Object_Detection
                 // Get modules
                 var modules = SQliteDataAccess.Module.Get();
                 // Get files
-                var files2 = Directory.GetFiles(Properties.Resources.path_images, "*.jpg", SearchOption.AllDirectories);
+                var files2 = Directory.GetFiles(Properties.Resources.path_images, "*.png", SearchOption.AllDirectories);
                 // Delete files if not exist in modules
                 foreach (var file in files2)
                 {
@@ -174,6 +181,8 @@ namespace Object_Detection
         {
             var drive = new List<DsDevice>(DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice));
 
+            videoInputDevices = GetVideoInputDevices();
+
             cbDrive.Items.Clear();
             foreach (DsDevice device in drive)
             {
@@ -212,6 +221,11 @@ namespace Object_Detection
             {
                 cbCOM.SelectedIndex = 0;
             }
+        }
+
+        private static DsDevice[] GetVideoInputDevices()
+        {
+            return DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice);
         }
 
         private void MyCapture_OnError(string messages)
@@ -264,7 +278,7 @@ namespace Object_Detection
             if (isObjDetect)
             {
                 string filename = SaveImagePredic(imgDetection, predictions);
-                string filename_master = Guid.NewGuid().ToString() + ".jpg";
+                string filename_master = Guid.NewGuid().ToString() + ".png";
                 filename_master.Replace("-", "_");
                 filename_master = "M_" + filename_master;
 
@@ -272,7 +286,7 @@ namespace Object_Detection
                     return;
                 using (Image bmp = Image.FromFile(Path.Combine(Properties.Resources.path_images, modules[0].image)))
                 {
-                    bmp.Save(Path.Combine(Properties.Resources.path_history, filename_master), ImageFormat.Jpeg);
+                    bmp.Save(Path.Combine(Properties.Resources.path_history, filename_master), ImageFormat.Png);
                 }
                 pictureBoxDetect.Image?.Dispose();
                 pictureBoxDetect.Image = Image.FromFile(Path.Combine(Properties.Resources.path_history, filename));
@@ -492,6 +506,53 @@ namespace Object_Detection
                     pictureBox1.Image?.Dispose();
                     pictureBox1.Image = Properties.Resources.Spinner_0_4s_800px;
                     camIndex = cbDrive.SelectedIndex;
+
+
+                    int hr;
+
+                    //// Create the Filter Graph Manager
+                    //_graphBuilder = (IFilterGraph2)new FilterGraph();
+                    //_captureGraphBuilder = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
+
+                    //// Initialize the Capture Graph Builder
+                    //hr = _captureGraphBuilder.SetFiltergraph(_graphBuilder);
+                    //DsError.ThrowExceptionForHR(hr);
+
+                    //// Create a filter for the video input device
+                    //IBaseFilter sourceFilter = null;
+                    //IBindCtx bindCtx = null;
+                    //try
+                    //{
+                    //    CreateBindCtx(0, out bindCtx);
+                    //    Guid guid = typeof(IBaseFilter).GUID;
+                    //    videoInputDevices[camIndex].Mon.BindToObject(bindCtx, null, ref guid, out object obj);
+                    //    sourceFilter = obj as IBaseFilter;
+                    //}
+                    //finally
+                    //{
+                    //    if (bindCtx != null)
+                    //    {
+                    //        Marshal.ReleaseComObject(bindCtx);
+                    //    }
+                    //}
+
+                    //// Add the video input device as a filter
+                    //if (sourceFilter != null)
+                    //{
+                    //    hr = _graphBuilder.AddFilter(sourceFilter, videoInputDevices[camIndex].Name);
+                    //    DsError.ThrowExceptionForHR(hr);
+                    //    _captureFilter = sourceFilter;
+                    //}
+
+                    //// Set the maximum resolution format
+                    //VideoInfoHeader maxResolutionFormat = GetHighestResolutionFormat(_captureFilter);
+                    //if (maxResolutionFormat != null)
+                    //{
+                    //    myCapture.width = maxResolutionFormat.BmiHeader.Width; ;
+                    //    myCapture.height = maxResolutionFormat.BmiHeader.Height;
+                    //}
+
+
                     openTask = Task.Run(() =>
                     {
                         myCapture.Start(camIndex);
@@ -586,6 +647,64 @@ namespace Object_Detection
             }
         }
 
+
+        [DllImport("ole32.dll")]
+        private static extern int CreateBindCtx(int reserved, out IBindCtx ppbc);
+
+        private VideoInfoHeader GetHighestResolutionFormat(IBaseFilter captureFilter)
+        {
+            IAMStreamConfig streamConfig = null;
+            VideoInfoHeader maxResolutionFormat = null;
+
+            IPin pin = DsFindPin.ByCategory(captureFilter, PinCategory.Capture, 0);
+            if (pin != null)
+            {
+                streamConfig = pin as IAMStreamConfig;
+
+                if (streamConfig != null)
+                {
+                    int formatCount;
+                    int formatSize;
+                    streamConfig.GetNumberOfCapabilities(out formatCount, out formatSize);
+
+                    int maxWidth = 0;
+                    int maxHeight = 0;
+
+                    for (int i = 0; i < formatCount; i++)
+                    {
+                        AMMediaType mediaType = null;
+                        VideoStreamConfigCaps caps = new VideoStreamConfigCaps();
+                        IntPtr ptrCaps = Marshal.AllocHGlobal(Marshal.SizeOf(caps));
+                        Marshal.StructureToPtr(caps, ptrCaps, false);
+
+                        streamConfig.GetStreamCaps(i, out mediaType, ptrCaps);
+
+                        caps = (VideoStreamConfigCaps)Marshal.PtrToStructure(ptrCaps, typeof(VideoStreamConfigCaps));
+                        Marshal.FreeHGlobal(ptrCaps);
+
+                        if (mediaType != null && mediaType.formatType == DirectShowLib.FormatType.VideoInfo && mediaType.formatPtr != IntPtr.Zero)
+                        {
+                            VideoInfoHeader format = (VideoInfoHeader)Marshal.PtrToStructure(mediaType.formatPtr, typeof(VideoInfoHeader));
+
+                            if (format.BmiHeader.Width * format.BmiHeader.Height > maxWidth * maxHeight)
+                            {
+                                maxWidth = format.BmiHeader.Width;
+                                maxHeight = format.BmiHeader.Height;
+                                maxResolutionFormat = format;
+                            }
+                        }
+
+                        DsUtils.FreeAMMediaType(mediaType);
+                    }
+                }
+
+                Marshal.ReleaseComObject(pin);
+            }
+
+            return maxResolutionFormat;
+        }
+
+
         private CameraControls camControls;
         private void settingToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -602,14 +721,14 @@ namespace Object_Detection
         {
             try
             {
-                string filename = Guid.NewGuid().ToString() + ".jpg";
+                string filename = Guid.NewGuid().ToString() + ".png";
 
                 if (!Directory.Exists(Properties.Resources.path_capture))
                     Directory.CreateDirectory(Properties.Resources.path_capture);
 
                 toolStripStatusLabel.Text = filename;
                 filename = Path.Combine(Properties.Resources.path_capture, filename);
-                imgDetection?.Save(filename, ImageFormat.Jpeg);
+                imgDetection?.Save(filename, ImageFormat.Png);
             }
             catch (Exception ex)
             {
@@ -679,7 +798,7 @@ namespace Object_Detection
 
         private string SaveImagePredic(Image image, Prediction[] predictions)
         {
-            string filename = Guid.NewGuid().ToString() + ".jpg";
+            string filename = Guid.NewGuid().ToString() + ".png";
 
             if (image == null || predictions == null || predictions.Length != 1) return string.Empty;
 
@@ -707,11 +826,11 @@ namespace Object_Detection
                     filename.Replace("-", "_");
                     filename = text + "_" + filename;
                     string path = Path.Combine(Properties.Resources.path_history, filename);
-                    img.Save(path, ImageFormat.Jpeg);
+                    img.Save(path, ImageFormat.Png);
 
                     string filename2 = text + "_2_" + filename;
                     path = Path.Combine(Properties.Resources.path_history, filename2);
-                    image.Save(path, ImageFormat.Jpeg);
+                    image.Save(path, ImageFormat.Png);
                     filename2.Replace("_2_", "");
                 };
             }

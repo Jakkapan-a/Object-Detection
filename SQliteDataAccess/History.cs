@@ -52,7 +52,10 @@ namespace Object_Detection.SQliteDataAccess
             parameters.Add("@model", model);
             parameters.Add("@image_path_master", image_path_master);
             parameters.Add("@image_path_result", image_path_result);
-            
+            parameters.Add("@result", result);
+            parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
+            parameters.Add("@id", id);
+            SQliteDataAccess.Execute(sql, parameters);
         }
 
         public void Delete(){
