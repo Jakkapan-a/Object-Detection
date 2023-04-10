@@ -507,59 +507,13 @@ namespace Object_Detection
                     pictureBox1.Image = Properties.Resources.Spinner_0_4s_800px;
                     camIndex = cbDrive.SelectedIndex;
 
-
-                    //int hr;
-
-                    //// Create the Filter Graph Manager
-                    //_graphBuilder = (IFilterGraph2)new FilterGraph();
-                    //_captureGraphBuilder = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
-
-                    //// Initialize the Capture Graph Builder
-                    //hr = _captureGraphBuilder.SetFiltergraph(_graphBuilder);
-                    //DsError.ThrowExceptionForHR(hr);
-
-                    //// Create a filter for the video input device
-                    //IBaseFilter sourceFilter = null;
-                    //IBindCtx bindCtx = null;
-                    //try
-                    //{
-                    //    CreateBindCtx(0, out bindCtx);
-                    //    Guid guid = typeof(IBaseFilter).GUID;
-                    //    videoInputDevices[camIndex].Mon.BindToObject(bindCtx, null, ref guid, out object obj);
-                    //    sourceFilter = obj as IBaseFilter;
-                    //}
-                    //finally
-                    //{
-                    //    if (bindCtx != null)
-                    //    {
-                    //        Marshal.ReleaseComObject(bindCtx);
-                    //    }
-                    //}
-
-                    //// Add the video input device as a filter
-                    //if (sourceFilter != null)
-                    //{
-                    //    hr = _graphBuilder.AddFilter(sourceFilter, videoInputDevices[camIndex].Name);
-                    //    DsError.ThrowExceptionForHR(hr);
-                    //    _captureFilter = sourceFilter;
-                    //}
-
-                    //// Set the maximum resolution format
-                    //VideoInfoHeader maxResolutionFormat = GetHighestResolutionFormat(_captureFilter);
-                    //if (maxResolutionFormat != null)
-                    //{
-                    //    myCapture.width = maxResolutionFormat.BmiHeader.Width;
-                    //    myCapture.height = maxResolutionFormat.BmiHeader.Height;
-                    //}
-
-
                     openTask = Task.Run(() =>
                     {
                         myCapture.Start(camIndex);
                     });
                     await openTask;
-                    cameraControl.set(camIndex);
 
+                    cameraControl.set(camIndex);
                     if (cbSerial.Checked)
                     {
                         // Connect to serial port
@@ -655,8 +609,8 @@ namespace Object_Detection
         {
             IAMStreamConfig streamConfig = null;
             VideoInfoHeader maxResolutionFormat = null;
-
             IPin pin = DsFindPin.ByCategory(captureFilter, PinCategory.Capture, 0);
+
             if (pin != null)
             {
                 streamConfig = pin as IAMStreamConfig;
